@@ -12,7 +12,7 @@ build: $(RS_SRC) js
 js: $(JS_SRC)
 	$(MAKE) -C $(JS)
 	mkdir -p public
-	cp -r $(JS_O)/* $(PUBLIC)
+	cp -r $(JS_O)/* public
 
 clean:
 	$(MAKE) -C $(JS) clean
