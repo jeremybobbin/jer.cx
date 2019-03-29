@@ -1,13 +1,48 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Link } from 'react-router-dom';
 import './App.css';
 
 class App extends Component {
 	render() {
 		return (
+			<BrowserRouter>
+				<Base>
+					<Route exact path="/" component={Main} />
+					<Route path="/downloads" component={Downloads} />
+					<Route path="/about" component={About} />
+				</Base>
+			</BrowserRouter>
+		);
+	}
+}
+
+class Base extends Component {
+	render() {
+		return (
 			<React.Fragment>
 				<Header />
-				<Main />
+					{this.props.children || Base}
 				<Footer />
+			</React.Fragment>
+		);
+	}
+}
+
+class Downloads extends Component {
+	render() {
+		return (
+			<React.Fragment>
+				<h1>Downloads</h1>
+			</React.Fragment>
+		);
+	}
+}
+
+class About extends Component {
+	render() {
+		return (
+			<React.Fragment>
+				<h1>About</h1>
 			</React.Fragment>
 		);
 	}
@@ -18,9 +53,11 @@ class Header extends Component {
 		return (
 			<header className="header">
 				<ul className="nav-bar">
-					<li><a className="site-name" href="/">Jer.cx</a></li>
-					<li><a href="#">Downloads</a></li>
-					<li><a href="#">About</a></li>
+
+					<li><Link to="/">Jer.cx</Link></li>
+					<li><Link to="/downloads">Downloads</Link></li>
+					<li><Link to="/about">About</Link></li>
+
 					{/*
 					<li className="dropdown" >
 						<a href="#" className="dropbtn">Dropdown</a>
@@ -51,7 +88,17 @@ class Footer extends Component {
 	render() {
 		return (
 			<footer className="footer">
-				Footer
+				<div className="outro">
+					<h4>
+						<a href="https://www.github.com/jeremybobbin">Github</a>
+					</h4>
+					<h4>
+						<a href="mailto:jer@jer.cx">Email</a>
+					</h4>
+					<h4>
+						<a href="https://www.github.com/jeremybobbin/jer.cx">Source</a>
+					</h4>
+				</div>
 			</footer>
 		)
 	}
