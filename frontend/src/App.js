@@ -54,7 +54,7 @@ class Header extends Component {
 			<header className="header">
 				<ul className="nav-bar">
 
-					<li><Link to="/">Jer.cx</Link></li>
+					<li><Link to="/" className="site-name">Jer.cx</Link></li>
 					<li><Link to="/downloads">Downloads</Link></li>
 					<li><Link to="/about">About</Link></li>
 
