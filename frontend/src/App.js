@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
@@ -18,8 +17,20 @@ class Header extends Component {
 	render() {
 		return (
 			<header className="header">
-					This is the Jer Header.
-					Gimme yer cash
+				<ul className="nav-bar">
+					<li><a className="site-name" href="/">Jer.cx</a></li>
+					<li><a href="#">Ding</a></li>
+					<li><a href="#">Dang</a></li>
+					<li><a href="#">Dong</a></li>
+					<li className="dropdown" >
+						<a href="#" className="dropbtn">Dropdown</a>
+						    <div className="dropdown-content">
+								<a href="#">Link 1</a>
+								<a href="#">Link 2</a>
+								<a href="#">Link 3</a>
+							</div>
+					</li>
+				</ul>
 			</header>
 		);
 	}
@@ -44,6 +55,7 @@ class Footer extends Component {
 		)
 	}
 }
+
 
 
 export default App;
