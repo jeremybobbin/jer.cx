@@ -1,24 +1,20 @@
 RS_SRC = src
-RS_O = target
 JS = frontend
-JS_SRC = $(JS)/src
 JS_O = $(JS)/build
-PUBLIC = public
-SASS = $(JS_SRC)/sass
 
 run: build
 	cargo run
 
-build: $(RS_O) $(PUBLIC) 
+build: $(RS_SRC) js
+	cargo build
 
-$(RS_O): $(RS_SRC)
 
-$(PUBLIC): $(JS_O)
-	mkdir -p $(PUBLIC)
+js: $(JS_SRC)
+	$(MAKE) -C $(JS)
+	mkdir -p public
 	cp -r $(JS_O)/* $(PUBLIC)
 
-$(JS_O): $(JS_SRC)
-	yarn --cwd $(JS) build
+clean:
+	$(MAKE) -C $(JS) clean
+	rm -rf target public Cargo.lock
 
-$(JS_SRC)/index.css: $(SASS)
-	sassc $(SASS)/index.scss > $(JS_SRC)/index.css
