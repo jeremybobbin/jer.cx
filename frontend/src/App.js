@@ -19,9 +19,9 @@ class Header extends Component {
 			<header className="header">
 				<ul className="nav-bar">
 					<li><a className="site-name" href="/">Jer.cx</a></li>
-					<li><a href="#">Ding</a></li>
-					<li><a href="#">Dang</a></li>
-					<li><a href="#">Dong</a></li>
+					<li><a href="#">Downloads</a></li>
+					<li><a href="#">About</a></li>
+					{/*
 					<li className="dropdown" >
 						<a href="#" className="dropbtn">Dropdown</a>
 						    <div className="dropdown-content">
@@ -30,6 +30,7 @@ class Header extends Component {
 								<a href="#">Link 3</a>
 							</div>
 					</li>
+					*/}
 				</ul>
 			</header>
 		);

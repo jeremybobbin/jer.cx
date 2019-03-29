@@ -1,7 +1,7 @@
-build: install src/*.js sass
+build: deps src/*.js sass
 	yarn build
 
-install: package.json
+deps: package.json
 	yarn install
 
 sass: src/sass
@@ -11,3 +11,7 @@ sass: src/sass
 clean:
 	$(MAKE) -C src/sass clean
 	rm -fr build node_modules yarn.lock
+
+watch: deps
+	 ls src/sass/* | entr -s 'sassc src/sass/index.scss > src/index.css' & yarn start
+
