@@ -1,0 +1,2 @@
+#!/bin/bash
+ ls src/sass/* | entr sassc src/sass/index.scss > src/index.css & yarn start

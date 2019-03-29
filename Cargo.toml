@@ -1,0 +1,9 @@
+[package]
+name = "site"
+version = "0.1.0"
+authors = ["Jeremy Bobbin <jeremybobbin@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+rocket = "*"
+rocket_contrib = "*"

@@ -1,0 +1,28 @@
+body {
+}
+#root {
+	display: grid;
+	grid-template-rows: 100px 1fr 100px;
+	grid-template-areas:
+		"header"
+		"main"
+		"footer";
+
+	align-items: stretch;
+	justify-items: stretch;
+}
+
+.header {
+	grid-area: header;
+	align-self: start;
+}
+
+.main {
+	grid-area: main;
+	align-self: stretch;
+}
+
+.footer {
+	grid-area: footer;
+	align-self: end;
+}
