@@ -1,0 +1,17 @@
+.footer {
+	background-color: $dark;
+	.outro {
+		margin: auto;
+		text-align: center;
+		h4 {
+			a {
+				text-decoration: underline;
+				color: $tertiary;
+			}
+			padding: 0 1em;
+			display: inline-block;
+			color: $light;
+			text-align: center;
+		}
+	}
+}
