@@ -7,12 +7,12 @@
 		margin: 0;
 		padding: 0;
 		overflow: hidden;
-		background-color: $primary;
+		background-color: $dark;
 	}
 
 	li {
 		float: left;
-		a, h2 .dropbtn {
+		a, .dropbtn {
 			display: inline-block;
 			text-align: center;
 			padding: 14px 16px;
@@ -20,7 +20,9 @@
 			color: $light;
 		}
 		.site-name {
-			color: $dark;
+			padding: 10px 20px 14px 12px;
+			font-size: 20px;
+			color: $light;
 			font-weight: bold;
 		}
 		.dropdown {
