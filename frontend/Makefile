@@ -5,7 +5,7 @@ deps: package.json
 	yarn install
 
 sass: src/sass
-	$(MAKE) -C src/sass
+	$(MAKE) -C src/sass build
 	cp src/sass/index.css src/index.css
 
 clean:
