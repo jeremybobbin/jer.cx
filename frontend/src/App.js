@@ -109,6 +109,22 @@ class Downloads extends Component {
 }
 
 function dateString(date) {
+	let mins = Math.floor((Date.now() - date) / (1000 * 60));
+
+	if(mins < 1)
+		return `Seconds ago.`
+
+	if (mins < 60)
+		return `${mins} minutes ago`;
+
+	let hours = Math.floor(mins / 60);
+	if (hours < 24) 
+		return `${hours} hours ago`;
+
+	let days = Math.floor(hours / 24);
+	if (days < 30)
+		return `${days} days ago`;
+
 	let month = date.getMonth() + 1;
 	let day = date.getDate() + 1;
 	let year =  date.getYear() - 100;
