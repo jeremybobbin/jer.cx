@@ -2,7 +2,7 @@ RS_SRC = src
 JS = frontend
 JS_O = $(JS)/build
 
-install: build_release
+install: build
 	systemctl stop jer.cx.service
 	cp jer.cx.service /etc/systemd/system/
 	mkdir -p /www
@@ -17,10 +17,10 @@ uninstall:
 run: build
 	cargo run
 
-build: $(RS_SRC) js
+build_debug: $(RS_SRC) js
 	cargo build
 
-build_release: $(RS_SRC) js
+build: $(RS_SRC) js
 	cargo build --release
 
 js: $(JS_SRC)
