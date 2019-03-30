@@ -108,6 +108,15 @@ class Downloads extends Component {
 	}
 }
 
+function dateString(date) {
+	let month = date.getMonth() + 1;
+	let day = date.getDate() + 1;
+	let year =  date.getYear() - 100;
+	let dayString = (day < 10 && "0" + day) || day.toString();
+	let monthString = (month < 10 && "0" + month) || month.toString();
+	return `${monthString}-${dayString}-20${year}`
+}
+
 class Github extends Component {
 	constructor(props) {
 		super(props);
@@ -121,24 +130,22 @@ class Github extends Component {
 			.then((repos) => {
 				console.log(repos);
 
-				// GitHub gives an Object like {
-				//	1: {
-				//	 ...
-				//	},
-				//	2: {
-				//   ...
-				//	}
-				//	...
-				// }
-				// Fun time.
+				// Refer to GitHub's documentation forr obscure datastructure details
 				let newRepos = [];
 
-				// Parse the given date string for sorting and display
+				// Initialize repo object for display
 				for (let i in repos) {
-					repos[i].date = new Date(Date.parse(repos[i].pushed_at));
-					newRepos.push(repos[i])
-				}
-
+					let limit = 16;
+					let repo = repos[i];
+					let date = new Date(Date.parse(repo.pushed_at));
+					repo.date = date;
+					repo.dateString = dateString(date);
+					repo.fullName = repo.name;
+					if (repo.name.length > limit) {
+						repo.name = repo.name.slice(0, limit) + '...' ;
+					}
+					newRepos.push(repo);
+				} 
 				newRepos.sort((l, r) => r.date - l.date);
 
 				this.setState({
@@ -149,29 +156,41 @@ class Github extends Component {
 	}
 	render() {
 		return (
-			<React.Fragment>
-				<h1>
+			<div className="repos">
+				<h1 className="repos-title">
 					GitHub
 				</h1>
-				<ul>
-					{this.state.repos.map(( repo, i ) => 
-						<div key={i}>
-							<li>
-								<a className="html-link" href={repo.html_url}>
-									{repo.name}
-								</a>
-								<a className="dl-link" href={repo.downloads_url}>
-									<Icon />
-								</a>
-								<span>
-										{`Last commit: ${ repo.date.getMonth() + 1}-${repo.date.getDate() + 1}-20${repo.date.getYear()-100}`}
-								</span>
-							</li>
-						</div>
-
-					)}
-				</ul>
-			</React.Fragment>
+					<table>
+						<thead className="table-header">
+							<tr >
+								<th>Repository</th>
+								<th>Last Commit</th> 
+							</tr>
+						</thead>
+						<tbody>
+							{this.state.repos.map(( repo, i ) => 
+								<tr key={i} className="repo">
+									<td>
+										{/* Place 'title' attribute if name is abbridged.*/}
+										<a className="html-link" title={repo.name !== repo.fullName && repo.fullName || ""} href={repo.html_url}>
+											{repo.name}
+										</a>
+									</td>
+									<td>
+										<span className="repo-name">
+												{ repo.dateString }
+										</span>
+									</td>
+									<td>
+										<a className="dl-link" href={repo.downloads_url}>
+											<Icon />
+										</a>
+									</td>
+								</tr>
+							)}
+						</tbody>
+					</table>
+			</div>
 		)
 	}
 }

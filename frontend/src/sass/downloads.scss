@@ -1,6 +1,21 @@
 .downloads {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-areas:
+		"repos misc";
 	.dl-icon {
-		width: 30px;
-		height: 30px;
+		width: 20px;
+		height: 20px;
+	}
+	.repos-title {
+		text-align: center;
+	}
+	.repos {
+		grid-area: repos;
+		margin: auto;
+		.table-header {
+			text-align: left;
+		}
 	}
 }
+
