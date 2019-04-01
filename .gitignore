@@ -1,5 +1,5 @@
 /target
+/public
 **/*.rs.bk
 rusty-tags.vi
 Cargo.lock
-./public
