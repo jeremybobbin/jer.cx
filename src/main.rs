@@ -23,14 +23,6 @@ fn get_conf(conf: ConfigBuilder) -> config::Result<Config> {
         .finalize()
 }
 
-#[get("/<alt>")]
-fn uni_redirect(alt: String) -> Option<Redirect> {
-    if alt == "resume.pdf" {
-         Some(Redirect::to("/"))
-    } else {
-        None
-    }
-}
 
 fn rocket() -> rocket::Rocket {
     // Bear with me ...
@@ -44,7 +36,6 @@ fn rocket() -> rocket::Rocket {
             .unwrap()
     };
     rocket::custom(conf) 
-        .mount("/", routes![uni_redirect])
         .mount("/", StaticFiles::from("/www/public"))
 }
 
