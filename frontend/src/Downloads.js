@@ -21,6 +21,11 @@ class Misc extends Component {
 					name: 'Resume',
 					url: '/resume.pdf',
 				},
+				{
+					name: 'LPIC-1 Certification',
+					url: 'https://cs.lpi.org/caf/Xamman/candidate_area/certificate/LPIC-1/yater4k2fq',
+				},
+				
 			]
 		};
 	}

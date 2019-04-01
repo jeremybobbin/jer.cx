@@ -21,7 +21,7 @@ class App extends Component {
 				<Base keydown={(e) => this.key(e)}>
 					<div>
 						<Route exact path="/" component={Main} />
-						<Route path="/downloads" component={Downloads} />
+						<Route path="/links" component={Downloads} />
 						<Route path="/about" component={About} />
 					</div>
 				</Base>
@@ -86,7 +86,7 @@ class Header extends Component {
 				<ul className="nav-bar">
 
 					<li><Link to="/" className="site-name">Jer.cx</Link></li>
-					<li><Link to="/downloads">Downloads</Link></li>
+					<li><Link to="/links">Links</Link></li>
 					<li><Link to="/about">About</Link></li>
 
 					{/*
