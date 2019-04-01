@@ -1,8 +1,14 @@
+#![feature(proc_macro_hygiene)]
+#![feature(decl_macro)]
+
+#[macro_use]
 extern crate rocket;
 extern crate rocket_contrib;
 
+
 use rocket_contrib::serve::StaticFiles;
 use rocket::fairing::AdHoc;
+use rocket::response::Redirect;
 use rocket::config::{
     self,
     Environment,
@@ -17,8 +23,14 @@ fn get_conf(conf: ConfigBuilder) -> config::Result<Config> {
         .finalize()
 }
 
+#[get("/<alt>")]
+fn uni_redirect(alt: String) -> Redirect {
+        Redirect::to("/")
+}
+
 fn rocket() -> rocket::Rocket {
     // Bear with me ...
+    // No 'Environment::Global'
     let conf = if let Ok(c) = get_conf(Config::build(Environment::Development)) {
         c
     } else if let Ok(c) = get_conf(Config::build(Environment::Staging)) {
@@ -28,6 +40,7 @@ fn rocket() -> rocket::Rocket {
             .unwrap()
     };
     rocket::custom(conf) 
+        .mount("/", routes![uni_redirect])
         .mount("/", StaticFiles::from("/www/public"))
 }
 
