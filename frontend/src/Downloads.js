@@ -19,7 +19,7 @@ class Misc extends Component {
 			repos: [
 				{
 					name: 'Resume',
-					url: '/resume',
+					url: '/resume.pdf',
 				},
 			]
 		};
