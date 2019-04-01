@@ -24,8 +24,12 @@ fn get_conf(conf: ConfigBuilder) -> config::Result<Config> {
 }
 
 #[get("/<alt>")]
-fn uni_redirect(alt: String) -> Redirect {
-        Redirect::to("/")
+fn uni_redirect(alt: String) -> Option<Redirect> {
+    if alt == "resume.pdf" {
+         Some(Redirect::to("/"))
+    } else {
+        None
+    }
 }
 
 fn rocket() -> rocket::Rocket {
