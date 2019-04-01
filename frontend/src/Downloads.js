@@ -6,6 +6,39 @@ export default class Downloads extends Component {
 		return (
 			<div className="downloads">
 				<Github />
+				<Misc />
+			</div>
+		);
+	}
+}
+
+class Misc extends Component {
+	constructor(props) {
+		super(props);
+		this.state =  {
+			repos: [
+				{
+					name: 'Resume',
+					url: '/resume',
+				},
+			]
+		};
+	}
+	render() {
+		return (
+			<div className="misc">
+				<h1 className="misc-title">
+						Misc
+				</h1>
+				<ul className="misc-list">
+						{this.state.repos.map((repo, i) => 
+							<li key={i} className="misc-item">
+								<a href={repo.url}>
+										{repo.name}
+								</a>
+							</li>
+						)}
+				</ul>
 			</div>
 		);
 	}

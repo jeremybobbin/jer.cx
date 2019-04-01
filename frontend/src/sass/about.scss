@@ -1,6 +1,29 @@
 .about {
 	width: 60%;
 	margin: auto;
+	.me {
+		position: relative;
+		p {
+			display: inline;
+			line-height: 1.75;
+			margin-left: 2em;
+		}
+		.jer-face-wrapper {
+			float: right;
+		}
+		.jer-face {
+			height: 15em;
+			margin: 1em;
+		}
+		
+	}
+
+	.this-site {
+		min-width: 100%;
+		p {
+		min-width: 100%;
+		}
+	}
 	h1 {
 		text-align: center;
 		text-decoration: underline;
