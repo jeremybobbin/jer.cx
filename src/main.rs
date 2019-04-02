@@ -18,8 +18,8 @@ use rocket::config::{
 
 fn get_conf(conf: ConfigBuilder) -> config::Result<Config> {
     conf
-        .address("45.77.215.144")
-        .port(80)
+        .address("127.0.0.1")
+        .port(8080)
         .finalize()
 }
 
