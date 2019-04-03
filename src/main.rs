@@ -56,7 +56,6 @@ use std::{
     }
 };
 
-
 #[database("site")]
 struct DbConn(diesel::MysqlConnection);
 
