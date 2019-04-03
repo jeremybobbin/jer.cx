@@ -1,0 +1,5 @@
+-- Your SQL goes here
+CREATE TABLE IF NOT EXISTS hashed_ips (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    ip_hash VARCHAR(255) NOT NULL UNIQUE
+);
