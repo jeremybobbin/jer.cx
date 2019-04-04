@@ -8,7 +8,8 @@ install: build
 	mkdir -p /www
 	chmod 644 /www
 	cp target/release/site /www/jer.cx
-	cp -r public /www
+	cp -r public Rocket.toml diesel.toml /www
+	systemctl daemon-reload
 
 uninstall:
 	systemctl stop jer.cx.service
