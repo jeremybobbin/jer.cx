@@ -236,7 +236,7 @@ class Game extends Component {
 			interval: setTimeout(() => this.decr(), 1000),
 			text: {
 				header: this.state.timer,
-				button: "Click my ass",
+				button: "Click Me",
 			},
 		});
 	}
