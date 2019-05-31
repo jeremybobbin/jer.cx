@@ -5,7 +5,7 @@ authors = ["Jeremy Bobbin <jeremybobbin@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-rocket = "*"
+rocket = { version = "*", features = ["tls"] }
 rocket_contrib = { version = "*", features = ["diesel_mysql_pool"] }
 diesel = { version = "1.0.0", features = ["mysql"] }
 sha3 = "*"

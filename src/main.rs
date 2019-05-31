@@ -132,7 +132,8 @@ fn rocket() -> rocket::Rocket {
 
 fn main() {
     let v = Views {};
-    rocket()
+
+     rocket()
         .attach(v)
         .attach(DbConn::fairing())
         .launch();

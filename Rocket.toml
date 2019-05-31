@@ -4,3 +4,7 @@ port = 8000
 
 [global.databases]
 site = { url = "mysql://jer@localhost/site" }
+
+[global.tls]
+certs = "/etc/letsencrypt/live/jer.cx/cert.pem"
+key = "/etc/letsencrypt/live/jer.cx/privkey.pem"
