@@ -6,5 +6,5 @@ port = 8000
 site = { url = "mysql://jer@localhost/site" }
 
 [global.tls]
-certs = "/etc/letsencrypt/live/jer.cx/cert.pem"
+certs = "/etc/letsencrypt/live/jer.cx/fullchain.pem"
 key = "/etc/letsencrypt/live/jer.cx/privkey.pem"

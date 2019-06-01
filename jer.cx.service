@@ -1,6 +1,7 @@
 [Unit]
-Description=Jer.cx HTTP service
-After=network.target
+Description=Jer.cx HTTPS service
+After=network.target mysqld.service
+Requires=mysqld.service
 StartLimitIntervalSec=0
 
 [Service]
