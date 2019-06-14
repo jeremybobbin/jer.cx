@@ -77,7 +77,7 @@ fn not_found() -> Redirect {
 fn main() {
     rocket::ignite()
         .mount("/", routes![index])
-        .mount("/public", StaticFiles::from("public"))
+        .mount("/", StaticFiles::from("public"))
         .register(catchers![not_found])
         .attach(DbConn::fairing())
         .launch();
