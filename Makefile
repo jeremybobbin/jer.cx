@@ -26,10 +26,10 @@ build: $(RS_SRC) js
 
 js: $(JS_SRC)
 	$(MAKE) -C $(JS)
-	mkdir -p public
-	cp -r $(JS_O)/* public
+	mkdir -p public/react
+	cp -r $(JS_O)/* public/react
 
 clean:
 	$(MAKE) -C $(JS) clean
-	rm -rf target public Cargo.lock
+	rm -rf target public/react Cargo.lock
 

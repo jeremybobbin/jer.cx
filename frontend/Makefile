@@ -1,5 +1,5 @@
 build: deps src/*.js sass
-	yarn build
+	PUBLIC_URL=/public/react yarn build
 
 deps: package.json
 	yarn install
