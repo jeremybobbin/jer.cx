@@ -1,3 +1,3 @@
 # Jer.cx
 JerPlace
-![Orange Lollipop](https://www.jer.cx/salty.png)
+![Orange Lollipop](public/salty.png)
