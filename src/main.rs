@@ -4,7 +4,10 @@
 #[macro_use] extern crate rocket_contrib;
 extern crate database;
 
-use rocket_contrib::serve::StaticFiles;
+use rocket_contrib::{
+    serve::StaticFiles,
+    json::Json,
+};
 
 use rocket::{
     response::{
@@ -20,8 +23,13 @@ use std::{
     path::PathBuf,
     net::SocketAddr,
     net::TcpListener,
-    io::Write,
-    io::Cursor,
+    io::{
+        self,
+        Write,
+        Cursor,
+    },
+    fs,
+    ffi::OsString,
     thread,
 };
 
@@ -51,6 +59,20 @@ fn video(path: PathBuf) -> Option<NamedFile> {
     NamedFile::open(path).ok()
 }
 
+#[get("/videos")]
+fn videos() -> Option<Json<Vec<String>>> {
+    let path = Path::new("assets/private/video");
+
+    let mut entries = fs::read_dir(&path).ok()?;
+
+    let dirs = entries.filter_map(Result::ok)
+        .map(|e| e.file_name())
+        .map(|e| e.into_string())
+        .filter_map(Result::ok)
+        .collect();
+
+    Some(Json(dirs))
+}
 
 
 #[catch(404)]
@@ -80,7 +102,7 @@ fn main() {
     });
 
     rocket::ignite()
-        .mount("/", routes![index, video])
+        .mount("/", routes![index, video, videos])
         .mount("/public", StaticFiles::from("assets/public"))
         .mount("/react", StaticFiles::from("assets/react"))
         .register(catchers![not_found])
