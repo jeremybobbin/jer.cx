@@ -1,2 +1,2 @@
 build:
-	diesel migration redo
+	diesel migration run
