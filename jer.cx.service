@@ -1,15 +1,15 @@
 [Unit]
 Description=Jer.cx HTTPS service
-After=network.target mysqld.service
-Requires=mysqld.service
+After=network.target postgresql.service
+Requires=postgresql.service
 StartLimitIntervalSec=0
 
 [Service]
 Type=simple
 Restart=always
 RestartSec=1
-WorkingDirectory=/www
-ExecStart=/www/jer.cx
+WorkingDirectory=/usr/srv/jer.cx
+ExecStart=/usr/bin/jer.cx
 
 [Install]
 WantedBy=multi-user.target

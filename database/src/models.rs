@@ -1,13 +1,13 @@
-use crate::schema::hashed_ips;
+use super::schema::hashed_ips;
 
 #[derive(Queryable)]
-pub struct hashed_ip {
-    pub id: u32,
+pub struct IP {
+    pub id: i32,
     pub hashed_ip: String,
 }
 
 #[derive(Insertable)]
 #[table_name="hashed_ips"]
-pub struct new_ip<'a> {
+pub struct NewIP<'a> {
     pub hashed_ip: &'a str,
 }

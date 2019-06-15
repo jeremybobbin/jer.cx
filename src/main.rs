@@ -2,72 +2,51 @@
 
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
-#[macro_use] extern crate diesel;
-
-extern crate sha3;
-use sha3::{Digest, Sha3_256};
+extern crate database;
 
 use rocket_contrib::serve::StaticFiles;
 
 use rocket::{
-    http::RawStr,
-    outcome::Outcome,
     response::{
         Redirect,
         NamedFile,
     },
 };
 
+use database::*;
+
 use std::{
     path::Path,
+    path::PathBuf,
     net::SocketAddr,
 };
 
-use diesel::prelude::*;
-
-use schema::hashed_ips::{
-    self,
-    dsl::*
-};
-
-use crate::{
-    models::*,
-    db::*,
-};
-
-mod models;
-mod db;
-mod schema;
 
 #[database("site")]
-struct DbConn(diesel::MysqlConnection);
+struct DbConn(PgConnection);
 
 // Hashes IP to put into DB. Should to be placed with data access logic
 #[get("/")]
-fn index(conn: DbConn, sock: SocketAddr) -> Option<NamedFile> {
-    let mut hasher = Sha3_256::new();
-    let ip = sock.ip();
+fn index(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
 
-    hasher.input(ip.to_string());
-
-    let result = hasher.result();
-    let ip = String::from_utf8_lossy(&result);
-
-    let new_ip = new_ip {
-        hashed_ip: &ip
-    };
- 
-    let db_res = diesel::insert_into(hashed_ips::table)
-        .values(&new_ip)
-        .execute(&*conn);
-
-    match db_res {
+    match database::insert_ip(&*conn, socket) {
         Ok(reason) => println!("DB Success: {:?}", {}),
         Err(reason) => println!("DB Error: {}", reason),
     }
 
-    NamedFile::open(Path::new("public/react/index.html")).ok()
+    NamedFile::open("assets/react/index.html").ok()
 }
+
+#[get("/video/<path..>")]
+fn video(path: PathBuf) -> Option<NamedFile> {
+
+    let path = Path::new("assets/private/video")
+        .join(path);
+
+    NamedFile::open(path).ok()
+}
+
+
 
 #[catch(404)]
 fn not_found() -> Redirect {
@@ -76,8 +55,9 @@ fn not_found() -> Redirect {
 
 fn main() {
     rocket::ignite()
-        .mount("/", routes![index])
-        .mount("/", StaticFiles::from("public"))
+        .mount("/", routes![index, video])
+        .mount("/public", StaticFiles::from("assets/public"))
+        .mount("/react", StaticFiles::from("assets/react"))
         .register(catchers![not_found])
         .attach(DbConn::fairing())
         .launch();

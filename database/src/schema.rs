@@ -1,6 +1,6 @@
 table! {
     hashed_ips (id) {
-        id -> Integer,
+        id -> Int4,
         hashed_ip -> Varchar,
     }
 }

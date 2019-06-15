@@ -3,8 +3,7 @@ address = "0.0.0.0"
 port = 8000
 
 [global.databases]
-site = { url = "mysql://jer@localhost/site" }
+site = { url = "postgres://jer@localhost/site" }
 
-[global.tls]
-certs = "/etc/letsencrypt/live/jer.cx/fullchain.pem"
-key = "/etc/letsencrypt/live/jer.cx/privkey.pem"
+[production]
+tls = { certs = "/etc/letsencrypt/live/jer.cx/fullchain.pem", key = "/etc/letsencrypt/live/jer.cx/privkey.pem" }

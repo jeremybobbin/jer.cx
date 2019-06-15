@@ -1,0 +1,2 @@
+build:
+	diesel migration redo

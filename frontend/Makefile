@@ -14,4 +14,3 @@ clean:
 
 watch: deps
 	 ls src/sass/* | entr -s 'sassc src/sass/index.scss > src/index.css' & yarn start
-
