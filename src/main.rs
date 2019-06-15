@@ -21,6 +21,7 @@ use std::{
     net::SocketAddr,
     net::TcpListener,
     io::Write,
+    io::Cursor,
     thread,
 };
 
@@ -28,9 +29,6 @@ use std::{
 #[database("site")]
 struct DbConn(PgConnection);
 
-const redirect: &'static [u8] = b"HTTP/1.1 302 Found
-Location: https://www.jer.cx/
-";
 
 // Hashes IP to put into DB. Should to be placed with data access logic
 #[get("/")]
@@ -60,8 +58,15 @@ fn not_found() -> Redirect {
     Redirect::to("/")
 }
 
+const HTTP_302: &'static str = "HTTP/1.1 302 Found\r\n";
+const URL: &'static str =      "https://www.jer.cx/";
+
 fn main() {
+    // Redirect HTTP to HTTPs.
     thread::spawn(move || {
+        let res = format!("{}Location: {}\r\n", HTTP_302, URL)
+            .into_bytes();
+
         let listener = TcpListener::bind("0.0.0.0:8080")
             .expect("Could not listen on port 8080.");
 
@@ -70,7 +75,7 @@ fn main() {
             .filter_map(Result::ok);
 
         for mut stream in streams {
-            stream.write(redirect);
+            stream.write(&res);
         }
     });
 
@@ -82,3 +87,4 @@ fn main() {
         .attach(DbConn::fairing())
         .launch();
 }
+
