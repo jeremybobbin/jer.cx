@@ -19,11 +19,18 @@ use std::{
     path::Path,
     path::PathBuf,
     net::SocketAddr,
+    net::TcpListener,
+    io::Write,
+    thread,
 };
 
 
 #[database("site")]
 struct DbConn(PgConnection);
+
+const redirect: &'static [u8] = b"HTTP/1.1 302 Found
+Location: https://www.jer.cx/
+";
 
 // Hashes IP to put into DB. Should to be placed with data access logic
 #[get("/")]
@@ -54,6 +61,19 @@ fn not_found() -> Redirect {
 }
 
 fn main() {
+    thread::spawn(move || {
+        let listener = TcpListener::bind("0.0.0.0:8080")
+            .expect("Could not listen on port 8080.");
+
+        let streams = listener
+            .incoming()
+            .filter_map(Result::ok);
+
+        for mut stream in streams {
+            stream.write(redirect);
+        }
+    });
+
     rocket::ignite()
         .mount("/", routes![index, video])
         .mount("/public", StaticFiles::from("assets/public"))
