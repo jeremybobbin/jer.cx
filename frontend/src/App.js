@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import Jer from './assets/jer.png';
 import Downloads from './Downloads.js';
+import Videos from './Videos.js';
 
 class App extends Component {
 	constructor(props) {
@@ -22,6 +23,7 @@ class App extends Component {
 					<div>
 						<Route exact path="/" component={Main} />
 						<Route path="/links" component={Downloads} />
+						<Route path="/videos" component={Videos} />
 						<Route path="/about" component={About} />
 					</div>
 				</Base>
@@ -87,6 +89,7 @@ class Header extends Component {
 
 					<li><Link to="/" className="site-name">Jer.cx</Link></li>
 					<li><Link to="/links">Links</Link></li>
+					<li><Link to="/videos">Videos</Link></li>
 					<li><Link to="/about">About</Link></li>
 
 					{/*
