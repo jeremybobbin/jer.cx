@@ -2,7 +2,13 @@
 
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
+#[macro_use] extern crate serde;
+#[macro_use] extern crate serde_derive;
 extern crate database;
+
+mod video;
+
+use crate::video::Video;
 
 use rocket_contrib::{
     serve::StaticFiles,
@@ -10,9 +16,19 @@ use rocket_contrib::{
 };
 
 use rocket::{
+    http::{
+        ContentType,
+    },
+    request::{
+        Request,
+    },
     response::{
+        self,
         Redirect,
         NamedFile,
+        Stream,
+        Responder,
+        Response
     },
 };
 
@@ -23,14 +39,24 @@ use std::{
     path::PathBuf,
     net::SocketAddr,
     net::TcpListener,
+    collections::HashMap,
+    thread,
+    time::{
+        SystemTime,
+        Duration,
+        UNIX_EPOCH,
+    },
     io::{
         self,
         Write,
         Cursor,
+        BufReader,
     },
-    fs,
+    fs::{
+        self,
+        File,
+    },
     ffi::OsString,
-    thread,
 };
 
 
@@ -51,12 +77,13 @@ fn index(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
 }
 
 #[get("/video/<path..>")]
-fn video(path: PathBuf) -> Option<NamedFile> {
+fn video(path: PathBuf) -> Option<Video> {
 
     let path = Path::new("assets/private/video")
         .join(path);
 
-    NamedFile::open(path).ok()
+    File::open(path).ok()
+        .map(|f| Video(f))
 }
 
 #[get("/videos")]
@@ -65,14 +92,54 @@ fn videos() -> Option<Json<Vec<String>>> {
 
     let mut entries = fs::read_dir(&path).ok()?;
 
-    let dirs = entries.filter_map(Result::ok)
+    let videos: Vec<String> = entries.filter_map(Result::ok)
         .map(|e| e.file_name())
         .map(|e| e.into_string())
         .filter_map(Result::ok)
         .collect();
 
-    Some(Json(dirs))
+    Some(Json(videos))
 }
+
+#[derive(Serialize)]
+struct Post {
+    name: String,
+    modified: u64,
+}
+
+#[get("/posts")]
+fn posts() -> Option<Json<Vec<Post>>> {
+    let path = Path::new("assets/posts");
+
+    let mut posts = fs::read_dir(&path).ok()?
+        .filter_map(Result::ok)
+        .filter_map(|e| {
+            let name = e.file_name()
+                .into_string();
+
+            let modified = e.metadata()
+                .and_then(|md| md.modified())
+                .map(|t| t.duration_since(UNIX_EPOCH).map(|d| d.as_secs()));
+            
+            if let (Ok(name), Ok(Ok(modified))) = (name, modified) {
+                Some(Post { name, modified })
+            } else {
+                None
+            }
+        })
+        .collect();
+
+    Some(Json(posts))
+}
+
+#[get("/<path>")]
+fn public(path: String) -> Option<NamedFile> {
+    let file_name = Path::new("assets/public")
+        .join(&path);
+
+    NamedFile::open(file_name).ok()
+}
+
 
 
 #[catch(404)]
@@ -101,9 +168,10 @@ fn main() {
         }
     });
 
+    let routes = routes![index, video, videos, posts, public];
+
     rocket::ignite()
-        .mount("/", routes![index, video, videos])
-        .mount("/public", StaticFiles::from("assets/public"))
+        .mount("/", routes)
         .mount("/react", StaticFiles::from("assets/react"))
         .register(catchers![not_found])
         .attach(DbConn::fairing())

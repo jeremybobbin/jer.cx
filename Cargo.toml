@@ -8,3 +8,5 @@ edition = "2018"
 rocket = { version = "*", features = ["tls"] }
 rocket_contrib = { version = "*", features = ["diesel_postgres_pool"] }
 database = { path = "database" }
+serde = "*"
+serde_derive = "*"

@@ -8,7 +8,7 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 RestartSec=1
-WorkingDirectory=/usr/srv/jer.cx
+WorkingDirectory=/usr/src/jer.cx
 ExecStart=/usr/bin/jer.cx
 
 [Install]

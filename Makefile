@@ -4,7 +4,7 @@ DATABASE = database
 
 JS_O = $(JS)/build
 
-DEST = /usr/srv/jer.cx/
+DEST = /usr/src/jer.cx/
 
 install: build
 	systemctl stop jer.cx.service

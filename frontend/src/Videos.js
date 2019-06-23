@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import Icon from './dl.js';
+import ReactPlayer from 'react-player'
+import { Player } from 'video-react';
+import ReactHLS from 'react-hls';
+
 
 export default class Videos extends Component {
 	constructor(props) {
@@ -10,29 +14,17 @@ export default class Videos extends Component {
 		}
 	}
 	componentDidMount() {
-		//fetch('/videos', {
-		//	mode: 'no-cors',
-		//})
-		//	.then((vids) => vids.json())
-		//	.then((videos) => {
-
-		//		console.log(videos);
-		//		videos.sort();
-
-		//		this.setState({
-		//			videos: videos
-		//		}, () => console.log(this.state));
-		//	})
-		//	.catch((err) => console.log('Error', err));
-		this.setState({
-			...this.state,
-			videos: [
-				"1.mp4",
-				"2.mp4",
-				"3.mp4",
-				"4.mp4",
-			]
-		});
+		fetch('/videos', {
+			mode: 'no-cors',
+		})
+			.then((body) => body.json())
+			.then((videos) => {
+				this.setState({
+					...this.state,
+					videos,
+				}, () => console.log(this.state));
+			})
+			.catch((err) => console.log('Error', err));
 	}
 
 	setSelected(name) {
@@ -44,10 +36,9 @@ export default class Videos extends Component {
 
 	source() {
 		if(this.state.selected) {
+			    
 			return (
-				<video width="640px" height="380px" controls>
-					<source src="http://192.168.0.5:8000/video/10.mp4" type="video/mp4"/>
-				</video>
+				<ReactPlayer url={"/video/" + this.state.selected} playing controls volume={1} />
 			);
 		} else {
 			return <React.Fragment />;
