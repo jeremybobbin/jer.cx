@@ -7,8 +7,10 @@
 extern crate database;
 
 mod video;
+mod cors;
 
 use crate::video::Video;
+use crate::cors::CORS;
 
 use rocket_contrib::{
     serve::StaticFiles,
@@ -63,11 +65,7 @@ use std::{
 #[database("site")]
 struct DbConn(PgConnection);
 
-
-// Hashes IP to put into DB. Should to be placed with data access logic
-#[get("/")]
-fn index(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
-
+fn serve_react(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
     match database::insert_ip(&*conn, socket) {
         Ok(reason) => println!("DB Success: {:?}", {}),
         Err(reason) => println!("DB Error: {}", reason),
@@ -76,8 +74,28 @@ fn index(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
     NamedFile::open("assets/react/index.html").ok()
 }
 
+#[get("/")]
+fn index(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
+    serve_react(conn, socket)
+}
+
+#[get("/about")]
+fn about(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
+    serve_react(conn, socket)
+}
+
+#[get("/links")]
+fn links(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
+    serve_react(conn, socket)
+}
+
+#[get("/video")]
+fn video(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
+    serve_react(conn, socket)
+}
+
 #[get("/video/<path..>")]
-fn video(path: PathBuf) -> Option<Video> {
+fn video_stream(path: PathBuf) -> Option<Video> {
 
     let path = Path::new("assets/private/video")
         .join(path);
@@ -132,6 +150,13 @@ fn posts() -> Option<Json<Vec<Post>>> {
     Some(Json(posts))
 }
 
+#[get("/posts/<name..>")]
+fn posts_by_name(name: PathBuf) -> Option<NamedFile> {
+    let mut path = Path::new("assets/posts");
+
+    NamedFile::open(path.join(name)).ok()
+}
+
 #[get("/<path>")]
 fn public(path: String) -> Option<NamedFile> {
     let file_name = Path::new("assets/public")
@@ -139,8 +164,6 @@ fn public(path: String) -> Option<NamedFile> {
 
     NamedFile::open(file_name).ok()
 }
-
-
 
 #[catch(404)]
 fn not_found() -> Redirect {
@@ -168,12 +191,13 @@ fn main() {
         }
     });
 
-    let routes = routes![index, video, videos, posts, public];
+    let routes = routes![index, video, videos, video_stream, posts, public, links, about, posts_by_name];
 
     rocket::ignite()
         .mount("/", routes)
         .mount("/react", StaticFiles::from("assets/react"))
         .register(catchers![not_found])
+        .attach(CORS())
         .attach(DbConn::fairing())
         .launch();
 }

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Icon from './dl.js';
 import ReactPlayer from 'react-player'
-import { Player } from 'video-react';
-import ReactHLS from 'react-hls';
 
 
 export default class Videos extends Component {

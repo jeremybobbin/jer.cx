@@ -18,11 +18,8 @@ uninstall:
 	systemctl stop jer.cx.service
 	rm -rf /etc/systemd/system/jer.cx.service $(DEST)
 
-build: js database $(RS_SRC)
+build: js $(RS_SRC)
 	cargo build --release
-
-database:
-	$(MAKE) -C $(DATABASE)
 
 js: $(JS_SRC)
 	$(MAKE) -C $(JS)
