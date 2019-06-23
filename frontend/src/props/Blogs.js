@@ -1,35 +1,35 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 
-
-export default class Videos extends Component {
+export default class Blogs extends Component {
 	constructor(props) {
 		super(props);
+		console.log(props);
 		this.state = {
-			videos: []
+			props,
+			blogs: [],
 		}
 	}
 
 	componentDidMount() {
-		fetch('/video', {
-			mode: 'no-cors',
-		})
+		fetch('/posts')
 			.then((body) => body.json())
-			.then((videos) => {
+			.then((blogs) => {
 				this.setState({
 					...this.state,
-					videos,
-				}, () => console.log(this.state));
+					blogs,
+				});
 			})
 			.catch((err) => console.log('Error', err));
 	}
 
+
 	render() {
 		return (
 			<ul>
-				{this.state.videos.map(( video, i ) => 
-					<li key={i} className="video">
-						<Link to={'/videos/' + video}>{video}</Link>
+				{ this.state.blogs.map((b) => 
+					<li>
+						<Link to={'/blog/' + b.name}>{b.name}</Link>
 					</li>
 				)}
 			</ul>

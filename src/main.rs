@@ -89,8 +89,13 @@ fn links(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
     serve_react(conn, socket)
 }
 
-#[get("/video")]
-fn video(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
+#[get("/videos/<path..>")]
+fn videos(conn: DbConn, socket: SocketAddr, path: Option<PathBuf>) -> Option<NamedFile> {
+    serve_react(conn, socket)
+}
+
+#[get("/blog/<path..>")]
+fn blog(conn: DbConn, socket: SocketAddr, path: Option<PathBuf>) -> Option<NamedFile> {
     serve_react(conn, socket)
 }
 
@@ -104,8 +109,8 @@ fn video_stream(path: PathBuf) -> Option<Video> {
         .map(|f| Video(f))
 }
 
-#[get("/videos")]
-fn videos() -> Option<Json<Vec<String>>> {
+#[get("/video")]
+fn video() -> Option<Json<Vec<String>>> {
     let path = Path::new("assets/private/video");
 
     let mut entries = fs::read_dir(&path).ok()?;
@@ -191,7 +196,18 @@ fn main() {
         }
     });
 
-    let routes = routes![index, video, videos, video_stream, posts, public, links, about, posts_by_name];
+    let routes = routes![
+        about,
+        blog,
+        index,
+        links,
+        posts,
+        posts_by_name,
+        public,
+        video,
+        video_stream,
+        videos,
+    ];
 
     rocket::ignite()
         .mount("/", routes)

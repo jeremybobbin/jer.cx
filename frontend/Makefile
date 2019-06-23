@@ -21,5 +21,5 @@ clean:
 	$(MAKE) -C src/sass clean
 	rm -fr build node_modules yarn.lock
 
-watch: deps
+watch: node_modules
 	 ls src/sass/* | entr -s 'sassc src/sass/index.scss > src/index.css' & yarn start
