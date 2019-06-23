@@ -8,9 +8,13 @@ extern crate database;
 
 mod video;
 mod cors;
+mod paste_id;
 
-use crate::video::Video;
-use crate::cors::CORS;
+use crate::{
+    video::Video,
+    cors::CORS,
+    paste_id::PasteID,
+};
 
 use rocket_contrib::{
     serve::StaticFiles,
@@ -18,6 +22,7 @@ use rocket_contrib::{
 };
 
 use rocket::{
+    Data,
     http::{
         ContentType,
     },
@@ -162,6 +167,24 @@ fn posts_by_name(name: PathBuf) -> Option<NamedFile> {
     NamedFile::open(path.join(name)).ok()
 }
 
+
+#[post("/pasta?<ext>", data = "<data>")]
+fn posta(data: Data, ext: String) -> io::Result<String> {
+    let name = PasteID::new(3, &ext);
+    let file = format!("assets/pasta/{}", name);
+
+    data.stream_to_file(file)?;
+    Ok(name.to_string())
+}
+
+#[get("/pasta/<name..>")]
+fn pasta(name: PathBuf) -> Option<NamedFile> {
+    let mut path = Path::new("assets/pasta");
+    NamedFile::open(path.join(name)).ok()
+}
+
+
+
 #[get("/<path>")]
 fn public(path: String) -> Option<NamedFile> {
     let file_name = Path::new("assets/public")
@@ -201,6 +224,8 @@ fn main() {
         blog,
         index,
         links,
+        pasta,
+        posta,
         posts,
         posts_by_name,
         public,

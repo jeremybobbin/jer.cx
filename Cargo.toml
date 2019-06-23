@@ -5,8 +5,9 @@ authors = ["Jeremy Bobbin <jeremybobbin@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+database = { path = "database" }
+rand = "*"
 rocket = { version = "*", features = ["tls"] }
 rocket_contrib = { version = "*", features = ["diesel_postgres_pool"] }
-database = { path = "database" }
 serde = "*"
 serde_derive = "*"
