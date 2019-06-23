@@ -10,6 +10,7 @@ address = "0.0.0.0"
 port = 8443
 
 [production]
+tls = { certs = "/etc/letsencrypt/live/jer.cx/fullchain.pem", key = "/etc/letsencrypt/live/jer.cx/privkey.pem" }
 address = "0.0.0.0"
 port = 8443
 
