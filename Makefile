@@ -1,8 +1,8 @@
-RS_SRC = src
-JS = frontend
-DATABASE = database
+RS_SRC = $(shell find src -type f)
+RS_OUT = target/release/site
 
-JS_O = $(JS)/build
+JS_OUT = $(shell find frontend/build -type f)
+REACT = $(shell find assets/react -type f)
 
 DEST = /usr/src/jer.cx/
 
@@ -18,16 +18,19 @@ uninstall:
 	systemctl stop jer.cx.service
 	rm -rf /etc/systemd/system/jer.cx.service $(DEST)
 
-build: js $(RS_SRC)
+build: react $(RS_OUT)
+
+$(RS_OUT): $(RS_SRC)
 	cargo build --release
 
-js: $(JS_SRC)
-	$(MAKE) -C $(JS)
+
+react: $(JS_OUT)
+	$(MAKE) -C frontend
 	mkdir -p assets/react
-	cp -r $(JS_O)/* assets/react
+	cp -r frontend/build/* assets/react
 
 clean:
-	$(MAKE) -C $(JS) clean
+	$(MAKE) -C frontend clean
 	rm -rf target assets/react Cargo.lock
 
 

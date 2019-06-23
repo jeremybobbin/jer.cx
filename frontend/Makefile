@@ -10,9 +10,12 @@ build: node_modules $(JS_SRC)
 node_modules: package.json
 	yarn install
 
-src/index.css: $(SASS_DIR)/index.scss
-	$(MAKE) -C src/sass build
+src/index.css: $(SASS_DIR)/index.scss src/sass/index.css
 	cp src/sass/index.css src/index.css
+
+src/sass/index.css: 
+	$(MAKE) -C src/sass build
+
 
 clean:
 	$(MAKE) -C src/sass clean

@@ -66,6 +66,8 @@ class BlogText extends Component {
 			}).catch((e) => console.log(e))
 	}
 
+
+
 	render() {
 
 		return (
