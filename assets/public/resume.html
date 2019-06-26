@@ -110,20 +110,19 @@
 <h2 id="technical-experience">Technical Experience</h2>
 <dl>
 <dt>Website</dt>
-<dd><p>Develops and maintains a one-page web application and server-side API (<a href="https://www.jer.cx/">https://www.jer.cx/</a>)</p>
+<dd><p>Develops and maintains a one-page web application and server-side API (<a href="https://www.jer.cx/">https://jer.cx/</a>)</p>
 <ul>
 <li><p>ReactJS front-end, Rustlang backend using a PostgreSQL database</p></li>
-<li><p>Serves HTTP over TLS</p></li>
+<li><p>Serves HTTP over SSL</p></li>
 <li><p>Repo: <a href="https://github.com/jeremybobbin/jer.cx">github.com/jeremybobbin/jer.cx</a></p></li>
 </ul>
 </dd>
 <dt>Home Lab</dt>
 <dd><p>Maintains personal Arch Linux machines and VPS</p>
 <ul>
-<li><p>Authentication is handled by the VPS, via OpenLDAP over LDAPS and Kerberos. Credentials are cached on client machines via RedHat’s System Security Services daemon(SSSD).</p></li>
-<li><p>Authorization is handled by PAM and the SSS PAM modules.</p></li>
+<li><p>Authentication and authorization is handled by the VPS, via OpenLDAP over LDAPS and Kerberos. Credentials are cached on client machines via RedHat’s System Security Services daemon(SSSD).</p></li>
 <li><p>Local machines and the VPS communicate over VPN with OpenVPN. All machines exchange IP routes via OSPF, thanks to Quagga’s OSPF daemon.</p></li>
-<li><p>Other configured services: OpenSSH, Rsyslog, Postfix(SMTPS), Dovecot(IMAPS), and NTP.</p></li>
+<li><p>Other configured services include Dovecot, NFTables, OpenSSH, Postfix, PostgreSQL, Rsyslog, BIND’s name daemon, the LLDP daemon and the NTP daemon.</p></li>
 </ul>
 </dd>
 </dl>
