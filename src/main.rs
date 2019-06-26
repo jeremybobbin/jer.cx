@@ -169,8 +169,10 @@ fn posts_by_name(name: PathBuf) -> Option<NamedFile> {
 
 
 #[post("/pasta?<ext>", data = "<data>")]
-fn posta(data: Data, ext: String) -> io::Result<String> {
+fn posta(data: Data, ext: Option<String>) -> io::Result<String> {
+    let ext = ext.unwrap_or("".to_string());
     let name = PasteID::new(3, &ext);
+
     let file = format!("assets/pasta/{}", name);
 
     data.stream_to_file(file)?;
