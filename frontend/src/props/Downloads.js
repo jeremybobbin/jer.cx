@@ -18,18 +18,21 @@ class Misc extends Component {
 		this.state =  {
 			repos: [
 				{
-					name: 'Resume',
+					name: 'CCNA Badge',
+					url: 'https://www.youracclaim.com/badges/ca415d77-d8cb-4678-8167-9ba82a9c067d/public_url',
+				},
+				{
+					name: 'LPIC-1 Certification PDF',
+					url: '/LPIC-1.pdf',
+				},
+				{
+					name: 'Resume PDF',
 					url: '/resume.pdf',
 				},
 				{
-					name: 'Resume HTML',
+					name: 'Resume',
 					url: '/resume.html',
 				},
-				{
-					name: 'LPIC-1 Certification',
-					url: 'https://cs.lpi.org/caf/Xamman/candidate_area/certificate/LPIC-1/yater4k2fq',
-				},
-				
 			]
 		};
 	}

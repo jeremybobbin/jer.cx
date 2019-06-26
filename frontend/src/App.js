@@ -19,7 +19,7 @@ export default class App extends Component {
 			<BrowserRouter>
 				<Base>
 					<div>
-						<Route component={Index}		exact path="/" />
+						<Route component={About}		exact path="/" />
 						<Route component={Blogs}		exact path="/blog" />
 						<Route component={Blog}			exact path="/blog/:name" />
 						<Route component={Downloads}	exact path="/links" />
