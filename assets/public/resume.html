@@ -20,7 +20,7 @@
       width: 800px;
       margin: auto;
       background: #FFFFFF;
-      padding: 10px 10px 10px 10px;
+      padding: 4px 10px 10px 10px;
   }
   
   table {
@@ -33,6 +33,7 @@
       color: #757575;
       text-align:center;
       margin-bottom:15px;
+      margin-top:0;
   }
   
   h2 {
@@ -89,7 +90,7 @@
 <h1 id="jeremy-bobbin">Jeremy Bobbin</h1>
 <hr />
 <center>
-<p><strong>Systems Administrator</strong></p>
+<p><strong>Junior Network/Systems Admin</strong></p>
 <p>Unix power user with a passion for optimizing workflow through the use of extensible tools.</p>
 </center>
 <hr />
@@ -117,11 +118,12 @@
 </ul>
 </dd>
 <dt>Home Lab</dt>
-<dd><p>Maintains personal Linux machines and Virtual Private Server</p>
+<dd><p>Maintains personal Arch Linux machines and VPS</p>
 <ul>
-<li><p>Authentication is handled by the VPS, via OpenLDAP over LDAPS and Kerberos. Credentials are cached on client machines via RedHat’s System Security Services daemon. Authorization is handled by PAM and the SSS PAM modules.</p></li>
-<li><p>Local machines and the VPS communicate over VPN with OpenVPN</p></li>
-<li><p>Other configured services: OpenSSH, Postfix(SMTPS), Dovecot(IMAPS), Quagga(OSPF) and NTP.</p></li>
+<li><p>Authentication is handled by the VPS, via OpenLDAP over LDAPS and Kerberos. Credentials are cached on client machines via RedHat’s System Security Services daemon(SSSD).</p></li>
+<li><p>Authorization is handled by PAM and the SSS PAM modules.</p></li>
+<li><p>Local machines and the VPS communicate over VPN with OpenVPN. All machines exchange IP routes via OSPF, thanks to Quagga’s OSPF daemon.</p></li>
+<li><p>Other configured services: OpenSSH, Rsyslog, Postfix(SMTPS), Dovecot(IMAPS), and NTP.</p></li>
 </ul>
 </dd>
 </dl>
@@ -131,9 +133,9 @@ all of which being either clients or servers of the following services: OpenVPN,
 -->
 <dl>
 <dt>Programming Languages</dt>
-<dd><p><strong>Bash/Posix Shell:</strong> Wrote various shell scripts(<a href="https://github.com/jeremybobbin/dotfiles">github.com/jeremybobbin/dotfiles</a>) to help improve development workflow, to ease configuration deployment and to improve my desktop experience as a whole.</p>
+<dd><p><strong>Bash/Posix Shell:</strong> Wrote various POSIX-complient shell scripts (<a href="https://github.com/jeremybobbin/dotfiles/tree/master/.local/bin">github.com/jeremybobbin/dotfiles</a>) to ease configuration deployment and to help improve development workflow.</p>
 </dd>
-<dd><p><strong>Rustlang:</strong> Wrote a terminal based filebrowser(<a href="https://github.com/jeremybobbin/browser">github.com/jeremybobbin/browser</a>) and helpful command-line applications, including Posix utilities</p>
+<dd><p><strong>Rustlang:</strong> Wrote a terminal based filebrowser(<a href="https://github.com/jeremybobbin/browser">github.com/jeremybobbin/browser</a>) and helpful command-line applications, including many POSIX-complient ‘coreutils’</p>
 </dd>
 <dd><strong>JavaScript:</strong> Wrote a number of React user interfaces, as well as server-side web APIs with NodeJS
 </dd>

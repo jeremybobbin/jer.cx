@@ -19,10 +19,15 @@
 	}
 
 	.this-site {
+		float: left;
 		min-width: 100%;
 		p {
-		min-width: 100%;
+			min-width: 100%;
 		}
+	}
+	.arch {
+		width: 100%;
+		padding-bottom: 1em;
 	}
 	h1 {
 		text-align: center;

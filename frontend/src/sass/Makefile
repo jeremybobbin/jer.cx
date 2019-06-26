@@ -1,7 +1,8 @@
+
 build: index.css
 
 clean:
 	rm -f index.css
 
-index.css: index.scss
+index.css: $(shell find . -name '*.scss')
 	sassc index.scss > index.css
