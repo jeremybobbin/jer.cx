@@ -15,6 +15,7 @@ install: build
 	cp jer.cx.service /etc/systemd/system/
 	cp target/release/site /usr/bin/jer.cx
 	systemctl daemon-reload
+	systemctl restart jer.cx.service
 
 uninstall:
 	systemctl stop jer.cx.service
@@ -28,7 +29,7 @@ $(RS_RELEASE): $(RS_SRC)
 $(RS_DEBUG): $(RS_SRC)
 	cargo build
 
-react: $(JS_OUT)
+react: 
 	$(MAKE) -C frontend
 	mkdir -p assets/react
 	cp -r frontend/build/* assets/react
