@@ -36,6 +36,8 @@ pub fn insert_ip(conn: &PgConnection, socket: SocketAddr) -> QueryResult<usize> 
     let mut hasher = Sha3_256::new();
     let ip = socket.ip();
 
+    println!("IP: {}", ip);
+
     hasher.input(ip.to_string());
 
     let result = hasher.result();

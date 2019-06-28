@@ -23,6 +23,10 @@ use rocket_contrib::{
 
 use rocket::{
     Data,
+    config::{
+        ConfigBuilder,
+        Environment,
+    },
     http::{
         ContentType,
     },
@@ -94,15 +98,29 @@ fn links(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
     serve_react(conn, socket)
 }
 
+#[get("/videos")]
+fn videos(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
+    serve_react(conn, socket)
+}
+
+#[get("/blog")]
+fn blog(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
+    serve_react(conn, socket)
+}
+
 #[get("/videos/<path..>")]
-fn videos(conn: DbConn, socket: SocketAddr, path: Option<PathBuf>) -> Option<NamedFile> {
+fn videos_sub(conn: DbConn, socket: SocketAddr, path: PathBuf) -> Option<NamedFile> {
     serve_react(conn, socket)
 }
 
 #[get("/blog/<path..>")]
-fn blog(conn: DbConn, socket: SocketAddr, path: Option<PathBuf>) -> Option<NamedFile> {
+fn blog_sub(conn: DbConn, socket: SocketAddr, path: PathBuf) -> Option<NamedFile> {
     serve_react(conn, socket)
 }
+
+
+
+// Frontend end; api begin
 
 #[get("/video/<path..>")]
 fn video_stream(path: PathBuf) -> Option<Video> {
@@ -200,30 +218,33 @@ fn not_found() -> Redirect {
     Redirect::to("/")
 }
 
-const HTTP_302: &'static str = "HTTP/1.1 302 Found\r\n";
-const URL: &'static str =      "https://www.jer.cx/";
+#[get("/")]
+fn to_https() -> Redirect {
+    Redirect::moved("https://www.jer.cx/")
+}
 
 fn main() {
     // Redirect HTTP to HTTPs.
     thread::spawn(move || {
-        let res = format!("{}Location: {}\r\n", HTTP_302, URL)
-            .into_bytes();
+        let mut conf = ConfigBuilder::new(Environment::Production)
+            .address("0.0.0.0")
+            .port(8080);
 
-        let listener = TcpListener::bind("0.0.0.0:8080")
-            .expect("Could not listen on port 8080.");
+        conf.tls = None;
 
-        let streams = listener
-            .incoming()
-            .filter_map(Result::ok);
+        let conf = conf.finalize()
+            .expect("Could not finalize http rocket instance");
 
-        for mut stream in streams {
-            stream.write(&res);
-        }
+        rocket::custom(conf)
+            .mount("/", routes![to_https]) 
+            .launch();
+
     });
 
     let routes = routes![
         about,
         blog,
+        blog_sub,
         index,
         links,
         pasta,
@@ -234,6 +255,8 @@ fn main() {
         video,
         video_stream,
         videos,
+        videos_sub,
+
     ];
 
     rocket::ignite()
