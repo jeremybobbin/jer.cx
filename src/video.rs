@@ -1,6 +1,18 @@
-use std::fs::File;
-use std::io::{self, BufReader};
-use std::str::FromStr;
+use std::{
+    str::FromStr,
+    fs::{
+        self,
+        File
+    },
+    io::{
+        self,
+        BufReader
+    },
+    path::{
+        Path,
+        PathBuf,
+    },
+};
 
 use rocket::{
     http::{Status, ContentType, Method},
@@ -9,7 +21,34 @@ use rocket::{
     request::Request,
 };
 
+use rocket_contrib::json::Json;
+
 pub struct Video(pub File);
+
+#[get("/video/<path..>")]
+pub fn video_stream(path: PathBuf) -> Option<Video> {
+
+    let path = Path::new("assets/private/video")
+        .join(path);
+
+    File::open(path).ok()
+        .map(|f| Video(f))
+}
+
+#[get("/video")]
+pub fn video() -> Option<Json<Vec<String>>> {
+    let path = Path::new("assets/private/video");
+
+    let entries = fs::read_dir(&path).ok()?;
+
+    let videos: Vec<String> = entries.filter_map(Result::ok)
+        .map(|e| e.file_name())
+        .map(|e| e.into_string())
+        .filter_map(Result::ok)
+        .collect();
+
+    Some(Json(videos))
+}
 
 impl<'r> Responder<'r> for Video {
     fn respond_to(self, req: &Request) -> response::Result<'r> {

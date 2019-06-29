@@ -12,16 +12,13 @@ mod paste_id;
 mod posts;
 
 use crate::{
-    video::Video,
+    video::*,
     cors::CORS,
     paste_id::PasteID,
     posts::*,
 };
 
-use rocket_contrib::{
-    serve::StaticFiles,
-    json::Json,
-};
+use rocket_contrib::serve::StaticFiles;
 
 use rocket::{
     Data,
@@ -43,10 +40,6 @@ use std::{
     net::SocketAddr,
     thread,
     io,
-    fs::{
-        self,
-        File,
-    },
 };
 
 
@@ -101,30 +94,6 @@ fn blog_sub(conn: DbConn, socket: SocketAddr, _path: PathBuf) -> Option<NamedFil
 
 // Frontend end; api begin
 
-#[get("/video/<path..>")]
-fn video_stream(path: PathBuf) -> Option<Video> {
-
-    let path = Path::new("assets/private/video")
-        .join(path);
-
-    File::open(path).ok()
-        .map(|f| Video(f))
-}
-
-#[get("/video")]
-fn video() -> Option<Json<Vec<String>>> {
-    let path = Path::new("assets/private/video");
-
-    let entries = fs::read_dir(&path).ok()?;
-
-    let videos: Vec<String> = entries.filter_map(Result::ok)
-        .map(|e| e.file_name())
-        .map(|e| e.into_string())
-        .filter_map(Result::ok)
-        .collect();
-
-    Some(Json(videos))
-}
 
 
 #[post("/pasta?<ext>", data = "<data>")]
