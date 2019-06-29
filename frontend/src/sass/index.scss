@@ -1,9 +1,13 @@
 @import "vars";
+
 @import "header";
-@import "downloads";
-@import "about";
 @import "main";
 @import "footer";
+
+@import "blog";
+@import "downloads";
+@import "about";
+
 @import "layout";
 
 .component {

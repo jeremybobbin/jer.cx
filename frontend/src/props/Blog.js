@@ -31,9 +31,8 @@ export default class Blog extends Component {
 		let { name, body } = this.state;
 
 		return (
-			<div>
+			<div className="blog" >
 				<h1>{ name }</h1>
-				<p>{ body }</p>
 				<ReactMarkdown source={ body } />
 			</div>
 		);
