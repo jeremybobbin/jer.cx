@@ -223,6 +223,14 @@ fn to_https() -> Redirect {
     Redirect::moved("https://www.jer.cx/")
 }
 
+#[get("/<path..>")]
+fn to_https_sub(path: Option<PathBuf>) -> Redirect {
+    if let Some(path) = path {
+        println!("Request to HTTP: {:?}", path);
+    }
+    Redirect::moved("https://www.jer.cx/")
+}
+
 fn main() {
     // Redirect HTTP to HTTPs.
     thread::spawn(move || {
@@ -236,7 +244,7 @@ fn main() {
             .expect("Could not finalize http rocket instance");
 
         rocket::custom(conf)
-            .mount("/", routes![to_https]) 
+            .mount("/", routes![to_https, to_https_sub]) 
             .launch();
 
     });
