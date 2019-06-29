@@ -1,10 +1,9 @@
 use std::fs::File;
-use std::io::{self, Cursor, BufReader};
-use std::fmt;
+use std::io::{self, BufReader};
 use std::str::FromStr;
 
 use rocket::{
-    http::{Status, ContentType, StatusClass, Method},
+    http::{Status, ContentType, Method},
     http::hyper::header::{AcceptRanges, Range, RangeUnit},
     response::{self, Response, Body, Responder},
     request::Request,

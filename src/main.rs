@@ -1,19 +1,21 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
+extern crate serde;
+extern crate database;
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
-#[macro_use] extern crate serde;
 #[macro_use] extern crate serde_derive;
-extern crate database;
 
 mod video;
 mod cors;
 mod paste_id;
+mod posts;
 
 use crate::{
     video::Video,
     cors::CORS,
     paste_id::PasteID,
+    posts::*,
 };
 
 use rocket_contrib::{
@@ -27,19 +29,9 @@ use rocket::{
         ConfigBuilder,
         Environment,
     },
-    http::{
-        ContentType,
-    },
-    request::{
-        Request,
-    },
     response::{
-        self,
         Redirect,
         NamedFile,
-        Stream,
-        Responder,
-        Response
     },
 };
 
@@ -49,25 +41,12 @@ use std::{
     path::Path,
     path::PathBuf,
     net::SocketAddr,
-    net::TcpListener,
-    collections::HashMap,
     thread,
-    time::{
-        SystemTime,
-        Duration,
-        UNIX_EPOCH,
-    },
-    io::{
-        self,
-        Write,
-        Cursor,
-        BufReader,
-    },
+    io,
     fs::{
         self,
         File,
     },
-    ffi::OsString,
 };
 
 
@@ -76,7 +55,7 @@ struct DbConn(PgConnection);
 
 fn serve_react(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
     match database::insert_ip(&*conn, socket) {
-        Ok(reason) => println!("DB Success: {:?}", {}),
+        Ok(_) => println!("DB Success: {:?}", {}),
         Err(reason) => println!("DB Error: {}", reason),
     }
 
@@ -108,13 +87,13 @@ fn blog(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
     serve_react(conn, socket)
 }
 
-#[get("/videos/<path..>")]
-fn videos_sub(conn: DbConn, socket: SocketAddr, path: PathBuf) -> Option<NamedFile> {
+#[get("/videos/<_path..>")]
+fn videos_sub(conn: DbConn, socket: SocketAddr, _path: PathBuf) -> Option<NamedFile> {
     serve_react(conn, socket)
 }
 
-#[get("/blog/<path..>")]
-fn blog_sub(conn: DbConn, socket: SocketAddr, path: PathBuf) -> Option<NamedFile> {
+#[get("/blog/<_path..>")]
+fn blog_sub(conn: DbConn, socket: SocketAddr, _path: PathBuf) -> Option<NamedFile> {
     serve_react(conn, socket)
 }
 
@@ -136,7 +115,7 @@ fn video_stream(path: PathBuf) -> Option<Video> {
 fn video() -> Option<Json<Vec<String>>> {
     let path = Path::new("assets/private/video");
 
-    let mut entries = fs::read_dir(&path).ok()?;
+    let entries = fs::read_dir(&path).ok()?;
 
     let videos: Vec<String> = entries.filter_map(Result::ok)
         .map(|e| e.file_name())
@@ -145,44 +124,6 @@ fn video() -> Option<Json<Vec<String>>> {
         .collect();
 
     Some(Json(videos))
-}
-
-#[derive(Serialize)]
-struct Post {
-    name: String,
-    modified: u64,
-}
-
-#[get("/posts")]
-fn posts() -> Option<Json<Vec<Post>>> {
-    let path = Path::new("assets/posts");
-
-    let mut posts = fs::read_dir(&path).ok()?
-        .filter_map(Result::ok)
-        .filter_map(|e| {
-            let name = e.file_name()
-                .into_string();
-
-            let modified = e.metadata()
-                .and_then(|md| md.modified())
-                .map(|t| t.duration_since(UNIX_EPOCH).map(|d| d.as_secs()));
-            
-            if let (Ok(name), Ok(Ok(modified))) = (name, modified) {
-                Some(Post { name, modified })
-            } else {
-                None
-            }
-        })
-        .collect();
-
-    Some(Json(posts))
-}
-
-#[get("/posts/<name..>")]
-fn posts_by_name(name: PathBuf) -> Option<NamedFile> {
-    let mut path = Path::new("assets/posts");
-
-    NamedFile::open(path.join(name)).ok()
 }
 
 
@@ -199,7 +140,7 @@ fn posta(data: Data, ext: Option<String>) -> io::Result<String> {
 
 #[get("/pasta/<name..>")]
 fn pasta(name: PathBuf) -> Option<NamedFile> {
-    let mut path = Path::new("assets/pasta");
+    let path = Path::new("assets/pasta");
     NamedFile::open(path.join(name)).ok()
 }
 
