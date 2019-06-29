@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+const ReactMarkdown = require('react-markdown')
 
 export default class Blog extends Component {
 
@@ -27,11 +28,13 @@ export default class Blog extends Component {
 
 
 	render() {
+		let { name, body } = this.state;
 
 		return (
 			<div>
-				<h1>{ this.state.name }</h1>
-				<p>{ this.state.body }</p>
+				<h1>{ name }</h1>
+				<p>{ body }</p>
+				<ReactMarkdown source={ body } />
 			</div>
 		);
 	}
