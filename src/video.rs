@@ -41,7 +41,8 @@ pub fn video() -> Option<Json<Vec<String>>> {
 
     let entries = fs::read_dir(&path).ok()?;
 
-    let videos: Vec<String> = entries.filter_map(Result::ok)
+    let videos: Vec<String> = entries
+        .filter_map(Result::ok)
         .map(|e| e.file_name())
         .map(|e| e.into_string())
         .filter_map(Result::ok)

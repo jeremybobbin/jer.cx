@@ -3,9 +3,8 @@ use rocket_contrib::{
 };
 
 use rocket::{
-    response::{
-        NamedFile,
-    },
+    http::RawStr,
+    response::NamedFile,
 };
 
 use std::{
@@ -28,8 +27,11 @@ pub fn posts() -> Option<Json<Vec<Post>>> {
     let posts = fs::read_dir(&path).ok()?
         .filter_map(Result::ok)
         .filter_map(|e| {
-            let name = e.file_name()
-                .into_string();
+            let path = e.path();
+            // Get file stem to remove '.md'
+            let name = path.file_stem()
+                .map(|stem| stem.to_os_string())
+                .map(|os_str| os_str.into_string())?;
 
             let modified = e.metadata()
                 .and_then(|md| md.modified())
@@ -46,11 +48,17 @@ pub fn posts() -> Option<Json<Vec<Post>>> {
     Some(Json(posts))
 }
 
-#[get("/posts/<name..>")]
-pub fn posts_by_name(name: PathBuf) -> Result<NamedFile, String> {
-    let path = Path::new("assets/posts");
-    let post = path.join(&name);
+#[get("/posts/<name>")]
+pub fn posts_by_name(name: String) -> Result<NamedFile, String> {
+    let name: String = name.chars()
+        .map(|c| {
+            if c == '_' {
+                ' '
+            } else {
+                c
+            }
+        }).collect();
+    let post = PathBuf::from(format!("assets/posts/{}.md", &name));
     NamedFile::open(&post)
         .map_err(|_err| format!("Could not find post: '{:?}'", name))
 }
-
