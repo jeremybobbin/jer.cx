@@ -23,15 +23,15 @@ class Misc extends Component {
 				},
 				{
 					name: 'LPIC-1 Certification PDF',
-					url: '/LPIC-1.pdf',
+					url: '/public/LPIC-1.pdf',
 				},
 				{
 					name: 'Resume PDF',
-					url: '/resume.pdf',
+					url: '/public/resume.pdf',
 				},
 				{
 					name: 'Resume',
-					url: '/resume.html',
+					url: '/public/resume.html',
 				},
 			]
 		};
