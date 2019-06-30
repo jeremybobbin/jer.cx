@@ -13,9 +13,8 @@ export default class VideoPlayer extends Component {
 			volume: 1,
 		};
 
-		this.duration = 0;
-		this.name = name;
 		this.player = React.createRef();
+		this.name = name;
 	}
 
 	onClick() {
@@ -53,13 +52,13 @@ export default class VideoPlayer extends Component {
 				break;
 			case 'ArrowLeft':
 			case 'h':
-				secs = this.player.getCurrentTime();
-				this.player.seekTo(Math.max(0, secs + 10));
+				secs = this.player.current.getCurrentTime();
+				this.player.current.seekTo(Math.max(0, secs - 10));
 				break;
 			case 'ArrowRight':
 			case 'l':
-				secs = this.player.getCurrentTime();
-				this.player.seekTo(Math.min(this.duration, secs - 10));
+				secs = this.player.current.getCurrentTime();
+				this.player.current.seekTo(Math.min(this.player.current.getDuration(), secs + 10));
 				break;
 			case '{':
 				this.setState({
@@ -87,10 +86,7 @@ export default class VideoPlayer extends Component {
 		return (
 			<div>
 				<ReactPlayer
-					ref={(p) => {
-						this.duration = p.getDuration();
-						this.player = p;
-					}}
+					ref={this.player}
 					height='90%'
 					width='100%'
 					url={"/video/" + this.name }
