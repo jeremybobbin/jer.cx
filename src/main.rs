@@ -113,16 +113,6 @@ fn pasta(name: PathBuf) -> Option<NamedFile> {
     NamedFile::open(path.join(name)).ok()
 }
 
-
-
-#[get("/<path>")]
-fn public(path: String) -> Option<NamedFile> {
-    let file_name = Path::new("assets/public")
-        .join(&path);
-
-    NamedFile::open(file_name).ok()
-}
-
 #[catch(404)]
 fn not_found() -> Redirect {
     Redirect::to("/")
@@ -131,6 +121,16 @@ fn not_found() -> Redirect {
 #[get("/")]
 fn to_https() -> Redirect {
     Redirect::moved("https://www.jer.cx/")
+}
+
+#[get("/resume.html")]
+fn resume_html() -> Redirect {
+    Redirect::moved("/public/resume.html")
+}
+
+#[get("/resume.pdf")]
+fn resume_pdf() -> Redirect {
+    Redirect::moved("/public/resume.pdf")
 }
 
 #[get("/<path..>")]
@@ -169,17 +169,20 @@ fn main() {
         posta,
         posts,
         posts_by_name,
-        public,
         video,
         video_stream,
         videos,
         videos_sub,
+        resume_html,
+        resume_pdf
+
 
     ];
 
     rocket::ignite()
         .mount("/", routes)
         .mount("/react", StaticFiles::from("assets/react"))
+        .mount("/public", StaticFiles::from("assets/public"))
         .register(catchers![not_found])
         .attach(CORS())
         .attach(DbConn::fairing())
