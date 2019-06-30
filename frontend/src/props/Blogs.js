@@ -26,13 +26,15 @@ export default class Blogs extends Component {
 
 	render() {
 		return (
-			<ul>
-				{ this.state.blogs.map((b) => 
-					<li>
-						<Link to={'/blog/' + b.name}>{b.name}</Link>
-					</li>
-				)}
-			</ul>
+			<div>
+				<ul>
+					{ this.state.blogs.map((b) => 
+						<li style={{padding: "0.5em"}} >
+							<Link to={'/blog/' + b.name.replace(/ /g, '_')}>{b.name} - Published: {b.modified}</Link>
+						</li>
+					)}
+				</ul>
+			</div>
 		);
 	}
 }

@@ -32,8 +32,11 @@ export default class Blog extends Component {
 
 		return (
 			<div className="blog" >
-				<h1>{ name }</h1>
-				<ReactMarkdown source={ body } />
+				<h1>{ name.replace(/_/g, ' ' ) }</h1>
+				<ReactMarkdown
+					escapeHtml={ false }
+					source={ body }
+				/>
 			</div>
 		);
 	}
