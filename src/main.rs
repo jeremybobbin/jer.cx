@@ -116,36 +116,11 @@ fn pasta(name: PathBuf, sock: SocketAddr) -> Option<NamedFile> {
 }
 
 
-// Generate error
-
-// Favicon.ico
-#[get("/status/<code>")]
-fn status(code: u16) -> Status {
-    Status::from_code(code)
-        .unwrap_or(Status::NotFound)
-}
-
-// Lambda
-#[get("/lambda")]
-fn lambda() -> Redirect {
-    Redirect::found("/lambda.sh")
-}
-
-#[get("/lambda.sh")]
-fn lambda_script() -> io::Result<NamedFile> {
-    NamedFile::open("assets/public/lambda.sh")
-}
-
-#[get("/lambda-server")]
-fn lambda_server() -> io::Result<NamedFile> {
-    NamedFile::open("assets/public/lambda-server.sh")
-}
-
 // Resume routes
 
 #[get("/resume.pdf")]
 fn resume_pdf() -> Redirect {
-    Redirect::found("/public/resume.pdf")
+    Redirect::moved("/public/resume.pdf")
 }
 
 #[get("/resume")]
@@ -178,19 +153,6 @@ fn linkedin(sock: SocketAddr) -> Redirect {
 #[get("/github")]
 fn github(sock: SocketAddr) -> Redirect {
     Redirect::to("https://www.github.com/jeremybobbin")
-}
-
-
-// Virtualize RouterOS shortcut
-#[get("/mikrotik")]
-fn mikrotik() -> Redirect {
-    Redirect::to("https://jer.cx/blog/Virtualize_RouterOS")
-}
-
-// Virtualize RouterOS shortcut
-#[get("/lebowsky")]
-fn lebowsky() -> Redirect {
-    Redirect::to("https://jer.cx/videos/The_Big_Lebowsky.mp4")
 }
 
 // Favicon.ico
@@ -257,14 +219,7 @@ fn main() {
         videos,
         videos_sub,
 
-        lambda,
-        lambda_script,
-        lambda_server,
-
-
         favicon,
-
-        lebowsky,
 
         resume,
         resume_htm,
