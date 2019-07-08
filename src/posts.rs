@@ -58,6 +58,7 @@ pub fn posts_by_name(name: String) -> Result<NamedFile, String> {
                 c
             }
         }).collect();
+    eprintln!("Viewing post: {}", name);
     let post = PathBuf::from(format!("assets/posts/{}.md", &name));
     NamedFile::open(&post)
         .map_err(|_err| format!("Could not find post: '{:?}'", name))

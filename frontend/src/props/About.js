@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Jer from '../assets/jer.png';
+import Jer from '../assets/jer.jpeg';
 import Arch from '../assets/arch.png';
 
 export default class About extends Component {

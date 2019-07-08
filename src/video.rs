@@ -28,6 +28,8 @@ pub struct Video(pub File);
 #[get("/video/<path..>")]
 pub fn video_stream(path: PathBuf) -> Option<Video> {
 
+
+    eprintln!("Viewing video: {:?}", path);
     let path = Path::new("assets/private/video")
         .join(path);
 

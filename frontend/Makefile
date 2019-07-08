@@ -4,6 +4,9 @@ SASS_DIR = src/sass
 JS_SRC = $(shell find src -type f -name '*.js')
 SASS_SRC = $(shell find src/sass -type f -name '*.scss')
 
+install: build
+
+
 build: node_modules $(JS_SRC) src/index.css
 	PUBLIC_URL=/react yarn build
 
