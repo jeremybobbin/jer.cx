@@ -8,14 +8,19 @@ REACT = $(shell find assets/react -type f)
 
 DEST = /usr/src/jer.cx/
 
-install: build
+install: build install_frontend
 	systemctl stop jer.cx.service
 	mkdir -p $(DEST)
-	cp -r Rocket.toml diesel.toml src assets $(DEST)
+	cp -r Rocket.toml diesel.toml src $(DEST)
 	cp jer.cx.service /etc/systemd/system/
 	cp target/release/site /usr/bin/jer.cx
 	systemctl daemon-reload
 	systemctl restart jer.cx.service
+
+install_frontend: react
+	mkdir -p $(DEST)
+	cp -r assets $(DEST)
+
 
 uninstall:
 	systemctl stop jer.cx.service

@@ -46,15 +46,7 @@ use std::{
 #[database("site")]
 struct DbConn(PgConnection);
 
-fn serve_react(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
-    match database::insert_ip(&*conn, socket) {
-        Ok(_) => println!("DB Success: {:?}", {}),
-        Err(reason) => println!("DB Error: {}", reason),
-    }
-
-    NamedFile::open("assets/react/index.html").ok()
-}
-
+// React Routes
 #[get("/")]
 fn index(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
     serve_react(conn, socket)
@@ -90,10 +82,19 @@ fn blog_sub(conn: DbConn, socket: SocketAddr, _path: PathBuf) -> Option<NamedFil
     serve_react(conn, socket)
 }
 
+fn serve_react(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
+    match database::insert_ip(&*conn, socket) {
+        Ok(_) => println!("DB Success: {:?}", {}),
+        Err(reason) => println!("DB Error: {}", reason),
+    }
+
+    NamedFile::open("assets/react/index.html").ok()
+}
 
 
-// Frontend end; api begin
-
+// Paste bin... 
+// POST /pasta?png 
+// returns => https://www.jer.cx/pasta/8sPo2aaE1.png
 
 
 #[post("/pasta?<ext>", data = "<data>")]
@@ -108,40 +109,84 @@ fn posta(data: Data, ext: Option<String>) -> io::Result<String> {
 }
 
 #[get("/pasta/<name..>")]
-fn pasta(name: PathBuf) -> Option<NamedFile> {
+fn pasta(name: PathBuf, sock: SocketAddr) -> Option<NamedFile> {
+    eprintln!("IP: {} - viewed {}", sock.ip(), name.display());
     let path = Path::new("assets/pasta");
     NamedFile::open(path.join(name)).ok()
 }
 
-#[catch(404)]
-fn not_found() -> Redirect {
-    Redirect::to("/")
-}
 
-#[get("/")]
-fn to_https() -> Redirect {
-    Redirect::moved("https://www.jer.cx/")
-}
-
-#[get("/resume.html")]
-fn resume_html() -> Redirect {
-    Redirect::moved("/public/resume.html")
-}
+// Resume routes
 
 #[get("/resume.pdf")]
 fn resume_pdf() -> Redirect {
     Redirect::moved("/public/resume.pdf")
 }
 
-#[get("/<path..>")]
-fn to_https_sub(path: Option<PathBuf>) -> Redirect {
-    if let Some(path) = path {
-        println!("Request to HTTP: {:?}", path);
-    }
+#[get("/resume")]
+fn resume(sock: SocketAddr) -> Option<NamedFile> {
+    eprintln!("Request to /resume.html from IP: {}", sock.ip());
+    NamedFile::open("assets/public/resume.html").ok()
+}
+
+#[get("/resume.html")]
+fn resume_html(sock: SocketAddr) -> Redirect {
+    resume_redirect(sock)
+}
+
+#[get("/resume.htm")]
+fn resume_htm(sock: SocketAddr) -> Redirect {
+    resume_redirect(sock)
+}
+
+fn resume_redirect(sock: SocketAddr) -> Redirect {
+    Redirect::to("/resume")
+}
+
+// Misc Media
+
+#[get("/linkedin")]
+fn linkedin(sock: SocketAddr) -> Redirect {
+    Redirect::to("https://www.linkedin.com/in/jeremybobbin")
+}
+
+#[get("/github")]
+fn github(sock: SocketAddr) -> Redirect {
+    Redirect::to("https://www.github.com/jeremybobbin")
+}
+
+
+// Favicon.ico
+#[get("/favicon.ico")]
+fn favicon() -> Option<NamedFile> {
+    NamedFile::open("assets/react/favicon.ico").ok()
+}
+
+
+// Port 80 routes
+#[get("/")]
+fn to_https() -> Redirect {
     Redirect::moved("https://www.jer.cx/")
 }
 
+#[get("/<path..>")]
+fn to_https_sub(path: PathBuf) -> Redirect {
+    let display = path.display();
+    eprintln!("HTTP Request to: {}", display);
+    Redirect::moved(format!("https://www.jer.cx/{}", display))
+}
+
+
+
+// Catchers
+#[catch(404)]
+fn not_found() -> Redirect {
+    Redirect::to("/")
+}
+
+
 fn main() {
+
     // Redirect HTTP to HTTPs.
     thread::spawn(move || {
         let mut conf = ConfigBuilder::new(Environment::Production)
@@ -159,7 +204,7 @@ fn main() {
 
     });
 
-    let routes = routes![
+    let mut routes = routes![
         about,
         blog,
         blog_sub,
@@ -173,10 +218,15 @@ fn main() {
         video_stream,
         videos,
         videos_sub,
+
+        favicon,
+
+        resume,
+        resume_htm,
         resume_html,
-        resume_pdf
-
-
+        resume_pdf,
+        linkedin,
+        github,
     ];
 
     rocket::ignite()
