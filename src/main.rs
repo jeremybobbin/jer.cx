@@ -30,6 +30,7 @@ use rocket::{
         Redirect,
         NamedFile,
     },
+    http::Status,
 };
 
 use database::*;
@@ -116,11 +117,36 @@ fn pasta(name: PathBuf, sock: SocketAddr) -> Option<NamedFile> {
 }
 
 
+// Generate error
+
+// Favicon.ico
+#[get("/status/<code>")]
+fn status(code: u16) -> Status {
+    Status::from_code(code)
+        .unwrap_or(Status::NotFound)
+}
+
+// Lambda
+#[get("/lambda")]
+fn lambda() -> Redirect {
+    Redirect::found("/lambda.sh")
+}
+
+#[get("/lambda.sh")]
+fn lambda_script() -> io::Result<NamedFile> {
+    NamedFile::open("assets/public/lambda.sh")
+}
+
+#[get("/lambda-server")]
+fn lambda_server() -> io::Result<NamedFile> {
+    NamedFile::open("assets/public/lambda-server.sh")
+}
+
 // Resume routes
 
 #[get("/resume.pdf")]
 fn resume_pdf() -> Redirect {
-    Redirect::moved("/public/resume.pdf")
+    Redirect::found("/public/resume.pdf")
 }
 
 #[get("/resume")]
@@ -155,6 +181,12 @@ fn github(sock: SocketAddr) -> Redirect {
     Redirect::to("https://www.github.com/jeremybobbin")
 }
 
+
+// Virtualize RouterOS shortcut
+#[get("/mikrotik")]
+fn mikrotik() -> Redirect {
+    Redirect::to("https://jer.cx/blog/Virtualize_RouterOS")
+}
 
 // Favicon.ico
 #[get("/favicon.ico")]
@@ -214,10 +246,16 @@ fn main() {
         posta,
         posts,
         posts_by_name,
+        status,
         video,
         video_stream,
         videos,
         videos_sub,
+
+        lambda,
+        lambda_script,
+        lambda_server,
+
 
         favicon,
 
@@ -227,6 +265,7 @@ fn main() {
         resume_pdf,
         linkedin,
         github,
+        mikrotik,
     ];
 
     rocket::ignite()
