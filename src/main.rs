@@ -7,12 +7,14 @@ extern crate database;
 #[macro_use] extern crate serde_derive;
 
 mod video;
+mod sales_rabbit;
 mod cors;
 mod paste_id;
 mod posts;
 
 use crate::{
     video::*,
+    sales_rabbit::*,
     cors::CORS,
     paste_id::PasteID,
     posts::*,
@@ -116,11 +118,32 @@ fn pasta(name: PathBuf, sock: SocketAddr) -> Option<NamedFile> {
 }
 
 
+// Generate error
+
+// Favicon.ico
+#[get("/status/<code>")]
+fn status(code: u16) -> Status {
+    Status::from_code(code)
+        .unwrap_or(Status::NotFound)
+}
+
+// Lambda
+#[get("/lambda")]
+fn lambda() -> Redirect {
+    Redirect::found("/lambda.sh")
+}
+
+#[get("/lambda.sh")]
+fn lambda_script() -> io::Result<NamedFile> {
+    NamedFile::open("assets/public/lambda.sh")
+}
+
+
 // Resume routes
 
 #[get("/resume.pdf")]
 fn resume_pdf() -> Redirect {
-    Redirect::moved("/public/resume.pdf")
+    Redirect::found("/public/resume.pdf")
 }
 
 #[get("/resume")]
@@ -153,6 +176,12 @@ fn linkedin(sock: SocketAddr) -> Redirect {
 #[get("/github")]
 fn github(sock: SocketAddr) -> Redirect {
     Redirect::to("https://www.github.com/jeremybobbin")
+}
+
+// Virtualize RouterOS shortcut
+#[get("/mikrotik")]
+fn mikrotik() -> Redirect {
+    Redirect::to("https://jer.cx/blog/Virtualize_RouterOS")
 }
 
 // Favicon.ico
@@ -218,6 +247,9 @@ fn main() {
         video_stream,
         videos,
         videos_sub,
+
+        lambda,
+        lambda_script,
 
         favicon,
 
