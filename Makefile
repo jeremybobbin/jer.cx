@@ -1,48 +1,47 @@
-RS_SRC = $(shell find src -type f)
+# See LICENSE file for copyright and license details
+# $(QUARK_SRC)/quark - simple web server
+.POSIX:
+QUARK_SRC=quark
 
-RS_DEBUG = target/debug/site
-RS_RELEASE = target/release/site
+# quark
+include $(QUARK_SRC)/config.mk
 
-JS_OUT = $(shell find frontend/build -type f)
-REACT = $(shell find assets/react -type f)
+COMPONENTS = $(QUARK_SRC)/util $(QUARK_SRC)/sock $(QUARK_SRC)/http $(QUARK_SRC)/resp
 
-DEST = /usr/src/jer.cx/
-
-install: build install_frontend
-	systemctl stop jer.cx.service
-	mkdir -p $(DEST)
-	cp -r Rocket.toml diesel.toml src $(DEST)
-	cp jer.cx.service /etc/systemd/system/
-	cp target/release/site /usr/bin/jer.cx
-	systemctl daemon-reload
-	systemctl restart jer.cx.service
-
-install_frontend: react
-	mkdir -p $(DEST)
-	cp -r assets $(DEST)
+all: $(QUARK_SRC)/quark
 
 
-uninstall:
-	systemctl stop jer.cx.service
-	rm -rf /etc/systemd/system/jer.cx.service $(DEST)
+$(QUARK_SRC)/util.o: $(QUARK_SRC)/util.c $(QUARK_SRC)/util.h $(QUARK_SRC)/config.mk
+$(QUARK_SRC)/sock.o: $(QUARK_SRC)/sock.c $(QUARK_SRC)/sock.h $(QUARK_SRC)/util.h $(QUARK_SRC)/config.mk
+$(QUARK_SRC)/http.o: $(QUARK_SRC)/http.c $(QUARK_SRC)/http.h $(QUARK_SRC)/util.h $(QUARK_SRC)/http.h $(QUARK_SRC)/resp.h $(QUARK_SRC)/config.h $(QUARK_SRC)/config.mk
+$(QUARK_SRC)/resp.o: $(QUARK_SRC)/resp.c $(QUARK_SRC)/resp.h $(QUARK_SRC)/util.h $(QUARK_SRC)/http.h $(QUARK_SRC)/config.mk
+$(QUARK_SRC)/main.o: $(QUARK_SRC)/main.c $(QUARK_SRC)/util.h $(QUARK_SRC)/sock.h $(QUARK_SRC)/http.h $(QUARK_SRC)/arg.h $(QUARK_SRC)/config.h $(QUARK_SRC)/config.mk
 
-build: react $(RS_RELEASE)
+$(QUARK_SRC)/quark: $(COMPONENTS:=.o) $(COMPONENTS:=.h) $(QUARK_SRC)/main.o $(QUARK_SRC)/config.mk
+	$(CC) -o $@ $(CPPFLAGS) $(CFLAGS) $(COMPONENTS:=.o) $(QUARK_SRC)/main.o $(LDFLAGS)
 
-$(RS_RELEASE): $(RS_SRC)
-	cargo build --release
-
-$(RS_DEBUG): $(RS_SRC)
-	cargo build
-
-react: 
-	$(MAKE) -C frontend
-	mkdir -p assets/react
-	cp -r frontend/build/* assets/react
+$(QUARK_SRC)/config.h:
+	cp config.def.h $@
 
 clean:
-	$(MAKE) -C frontend clean
-	rm -rf target assets/react Cargo.lock
+	rm -f $(QUARK_SRC)/quark $(QUARK_SRC)/main.o $(COMPONENTS:=.o)
 
-run: react
-	cargo run
+dist:
+	rm -rf "$(QUARK_SRC)/quark-$(VERSION)"
+	mkdir -p "$(QUARK_SRC)/quark-$(VERSION)"
+	cp -R LICENSE Makefile $(QUARK_SRC)/arg.h config.$(QUARK_SRC)/def.h $(QUARK_SRC)/config.mk $(QUARK_SRC)/quark.1 \
+		$(COMPONENTS:=.c) $(COMPONENTS:=.h) $(QUARK_SRC)/main.c "$(QUARK_SRC)/quark-$(VERSION)"
+	tar -cf - "$(QUARK_SRC)/quark-$(VERSION)" | gzip -c > "$(QUARK_SRC)/quark-$(VERSION).tar.gz"
+	rm -rf "$(QUARK_SRC)/quark-$(VERSION)"
 
+install: all
+	mkdir -p "$(DESTDIR)$(PREFIX)/bin"
+	cp -f $(QUARK_SRC)/quark "$(DESTDIR)$(PREFIX)/bin"
+	chmod 755 "$(DESTDIR)$(PREFIX)/bin/$(QUARK_SRC)/quark"
+	mkdir -p "$(DESTDIR)$(MANPREFIX)/man1"
+	cp $(QUARK_SRC)/quark.1 "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
+	chmod 644 "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
+
+uninstall:
+	rm -f "$(DESTDIR)$(PREFIX)/bin/$(QUARK_SRC)/quark"
+	rm -f "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
