@@ -1,2 +1,0 @@
-build:
-	diesel migration run
