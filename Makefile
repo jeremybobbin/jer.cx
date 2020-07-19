@@ -1,14 +1,26 @@
 # See LICENSE file for copyright and license details
 # $(QUARK_SRC)/quark - simple web server
-.POSIX:
+SRV=srv
 QUARK_SRC=quark
+CSS_SRC=css
+PUBLIC=$(SRV)/public
 
-# quark
+all: $(QUARK_SRC)/quark $(PUBLIC)/index.css
+
+
+# CSS
+%.css: %.scss
+	sassc $< > $@
+
+$(PUBLIC)/index.css: $(CSS_SRC)/index.css
+	cp $< $@
+
+$(CSS_SRC)/index.css: $(CSS_SRC)/index.scss
+
+# QUARK
 include $(QUARK_SRC)/config.mk
 
 COMPONENTS = $(QUARK_SRC)/util $(QUARK_SRC)/sock $(QUARK_SRC)/http $(QUARK_SRC)/resp
-
-all: $(QUARK_SRC)/quark
 
 
 $(QUARK_SRC)/util.o: $(QUARK_SRC)/util.c $(QUARK_SRC)/util.h $(QUARK_SRC)/config.mk
