@@ -4,9 +4,27 @@ SRV=srv
 QUARK_SRC=quark
 CSS_SRC=css
 PUBLIC=$(SRV)/public
+HTML=html
+
 
 all: $(QUARK_SRC)/quark $(PUBLIC)/index.css
 
+build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
+	$(HTML)/index.html $(HTML)/stream.html
+	cp -a root/. $(SRV)
+	cp $(JS)/stream.js $(SRV)
+	cp $(CSS_SRC)/index.css $(SRV)
+	cp $(HTML)/index.html $(HTML)/stream.html $(SRV)
+
+
+# HTML
+%.html: %.html.m4
+	m4 -I html $< > $@
+
+$(HTML)/base.m4: $(HTML)/defs.m4 $(HTML)/header.html.m4 $(HTML)/footer.html.m4
+$(HTML)/index.html.m4 $(HTML)/stream.html.m4: $(HTML)/base.m4
+$(HTML)/index.html: $(HTML)/index.html.m4
+$(HTML)/stream.html: $(HTML)/stream.html.m4
 
 # CSS
 %.css: %.scss
