@@ -1,0 +1,15 @@
+#!/bin/sh -e
+PASTE_BIN=pasta.d
+
+printf '\n'
+
+env >> log
+if [ "$REQUEST_METHOD" = GET ]; then
+	cat "${PASTE_BIN}/${QUERY_STRING##*/}"
+	echo get >> log
+elif [ "$REQUEST_METHOD" = POST ]; then
+	code="$(tr -dc '[:alnum:]' < /dev/urandom | head -c3)"
+	echo "$code"
+	cat > "${PASTE_BIN}/$code"
+fi
+
