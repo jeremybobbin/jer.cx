@@ -1,0 +1,10 @@
+#!/bin/sh -e
+PASTE_BIN=pasta
+
+printf '\n'
+if [ "$REQUEST_METHOD" = POST ]; then
+	code="$(tr -dc '[:alnum:]' < /dev/urandom | head -c3)"
+	echo "$code"
+	cat > "${PASTE_BIN}/$code"
+fi
+
