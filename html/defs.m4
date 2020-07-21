@@ -25,6 +25,6 @@ TAG([BOLD], [strong])
 TAG([LINK], [a], [href="$1" $2])
 TAG([SCRIPT], [script], [ifelse($#, 0, [], [src="$1"])])
 TAG([MAIN], [main])
-TAG([CSS], [style], [rel="stylesheet" href="$1" $2])
+TAG([CSS], [link], [rel="stylesheet" href="$1" $2])
 divert(0)dnl
 
