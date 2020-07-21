@@ -1,3 +1,6 @@
 [submodule "quark"]
 	path = quark
 	url = https://github.com/jeremybobbin/quark
+[submodule "rtsp-simple-server"]
+	path = rtsp-simple-server
+	url = https://github.com/aler9/rtsp-simple-server
