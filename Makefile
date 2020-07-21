@@ -16,15 +16,6 @@ build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	cp $(CSS_SRC)/index.css $(SRV)
 	cp $(HTML)/index.html $(HTML)/stream.html $(SRV)
 
-
-build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
-	$(HTML)/index.html $(HTML)/stream.html
-	cp -a root/. $(SRV)
-	cp $(JS)/stream.js $(SRV)
-	cp $(CSS_SRC)/index.css $(SRV)
-	cp $(HTML)/index.html $(HTML)/stream.html $(SRV)
-
-
 # HTML
 %.html: %.html.m4
 	m4 -I html $< > $@
@@ -58,9 +49,6 @@ $(QUARK_SRC)/quark: $(COMPONENTS:=.o) $(COMPONENTS:=.h) $(QUARK_SRC)/main.o $(QU
 $(QUARK_SRC)/config.h:
 	cp config.def.h $@
 
-clean:
-	rm -f $(QUARK_SRC)/quark $(QUARK_SRC)/main.o $(COMPONENTS:=.o)
-
 dist:
 	rm -rf "$(QUARK_SRC)/quark-$(VERSION)"
 	mkdir -p "$(QUARK_SRC)/quark-$(VERSION)"
@@ -80,3 +68,8 @@ install: all
 uninstall:
 	rm -f "$(DESTDIR)$(PREFIX)/bin/$(QUARK_SRC)/quark"
 	rm -f "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
+
+clean:
+	rm -f $(HTML)/*.html
+	rm -f $(QUARK_SRC)/quark $(QUARK_SRC)/main.o $(COMPONENTS:=.o)
+	rm -rf $(SRV)
