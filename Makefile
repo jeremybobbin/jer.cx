@@ -1,13 +1,21 @@
 # See LICENSE file for copyright and license details
 # $(QUARK_SRC)/quark - simple web server
 SRV=srv
+ROOT=root
 QUARK_SRC=quark
 CSS_SRC=css
 PUBLIC=$(SRV)/public
 HTML=html
+JS=js
 
 
-all: $(QUARK_SRC)/quark $(PUBLIC)/index.css
+build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
+	$(HTML)/index.html $(HTML)/stream.html
+	cp -a root/. $(SRV)
+	cp $(JS)/stream.js $(SRV)
+	cp $(CSS_SRC)/index.css $(SRV)
+	cp $(HTML)/index.html $(HTML)/stream.html $(SRV)
+
 
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	$(HTML)/index.html $(HTML)/stream.html
@@ -29,9 +37,6 @@ $(HTML)/stream.html: $(HTML)/stream.html.m4
 # CSS
 %.css: %.scss
 	sassc $< > $@
-
-$(PUBLIC)/index.css: $(CSS_SRC)/index.css
-	cp $< $@
 
 $(CSS_SRC)/index.css: $(CSS_SRC)/index.scss
 
