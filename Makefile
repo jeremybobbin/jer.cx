@@ -21,8 +21,9 @@ build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	m4 -I html $< > $@
 
 $(HTML)/base.m4: $(HTML)/defs.m4 $(HTML)/header.html.m4 $(HTML)/footer.html.m4
-$(HTML)/index.html.m4: $(HTML)/base.m4
+$(HTML)/index.html.m4 $(HTML)/stream.html.m4: $(HTML)/base.m4
 $(HTML)/index.html: $(HTML)/index.html.m4
+$(HTML)/stream.html: $(HTML)/stream.html.m4
 
 # CSS
 %.css: %.scss
