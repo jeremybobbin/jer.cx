@@ -5,5 +5,6 @@ HEADER(class="header")
 		LI LINK([/blog]) Blog END END
 		LI LINK([/videos]) Videos END END
 		LI LINK([/about]) About END END
+		LI LINK([/stream.html]) Stream END END
 	END
 END
