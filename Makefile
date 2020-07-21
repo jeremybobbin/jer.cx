@@ -70,5 +70,6 @@ uninstall:
 	rm -f "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
 
 clean:
-	rm -rf $(SRV)
+	rm -f $(HTML)/*.html
 	rm -f $(QUARK_SRC)/quark $(QUARK_SRC)/main.o $(COMPONENTS:=.o)
+	rm -rf $(SRV)
