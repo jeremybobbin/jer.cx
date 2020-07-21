@@ -1,5 +1,1 @@
-/target
-/public/react/*
-**/*.rs.bk
-rusty-tags.vi
-Cargo.lock
+srv
