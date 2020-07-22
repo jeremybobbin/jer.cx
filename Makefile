@@ -2,15 +2,17 @@
 # $(QUARK_SRC)/quark - simple web server
 SRV=srv
 ROOT=root
-QUARK_SRC=quark
 CSS_SRC=css
 PUBLIC=$(SRV)/public
 HTML=html
 JS=js
 
+QUARK_SRC=quark
+RTSP=rtsp-simple-server
+
 
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
-	$(HTML)/index.html $(HTML)/stream.html
+	$(HTML)/index.html $(HTML)/stream.html $(RTSP)/rtsp-simple-server
 	cp -a root/. $(SRV)
 	cp $(JS)/stream.js $(SRV)
 	cp $(CSS_SRC)/index.css $(SRV)
@@ -68,6 +70,13 @@ install: all
 uninstall:
 	rm -f "$(DESTDIR)$(PREFIX)/bin/$(QUARK_SRC)/quark"
 	rm -f "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
+
+# RTSP
+
+$(RTSP)/rtsp-simple-server: $(RTSP)/conf.go $(RTSP)/main.go \
+	$(RTSP)/main_test.go $(RTSP)/server-client.go $(RTSP)/server-tcpl.go \
+	$(RTSP)/server-udpl.go $(RTSP)/source.go $(RTSP)/utils.go
+	cd $(RTSP) && go build
 
 clean:
 	rm -f $(HTML)/*.html
