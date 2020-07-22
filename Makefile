@@ -13,11 +13,11 @@ RTSP=rtsp-simple-server
 
 
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
-	$(HTML)/index.html $(HTML)/stream.html $(RTSP)/rtsp-simple-server
+	$(HTML)/index.html $(HTML)/stream/index.html $(RTSP)/rtsp-simple-server
 	cp -a root/. $(SRV)
 	cp $(JS)/stream.js $(SRV)
 	cp $(CSS_SRC)/index.css $(SRV)
-	cp $(HTML)/index.html $(HTML)/stream.html $(SRV)
+	cp -a $(HTML)/index.html $(HTML)/stream $(SRV)
 	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server $(BIN)
 
 # HTML
@@ -25,9 +25,9 @@ build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	m4 -I html $< > $@
 
 $(HTML)/base.m4: $(HTML)/defs.m4 $(HTML)/header.html.m4 $(HTML)/footer.html.m4
-$(HTML)/index.html.m4 $(HTML)/stream.html.m4: $(HTML)/base.m4
+$(HTML)/index.html.m4 $(HTML)/stream/index.html.m4: $(HTML)/base.m4
 $(HTML)/index.html: $(HTML)/index.html.m4
-$(HTML)/stream.html: $(HTML)/stream.html.m4
+$(HTML)/stream/index.html: $(HTML)/stream.html.m4
 
 # CSS
 %.css: %.scss
