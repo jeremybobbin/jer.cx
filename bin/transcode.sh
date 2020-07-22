@@ -1,5 +1,5 @@
 #!/bin/sh
-: ${STREAM_DIR=srv}
+: ${STREAM_DIR=srv/stream}
 : ${STREAM_URL="rtsp://localhost:8554/stream"}
 exec ffmpeg \
 	-fflags nobuffer \
