@@ -1,6 +1,7 @@
 # See LICENSE file for copyright and license details
 # $(QUARK_SRC)/quark - simple web server
 SRV=srv
+BIN=bin
 ROOT=root
 CSS_SRC=css
 PUBLIC=$(SRV)/public
@@ -17,6 +18,7 @@ build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	cp $(JS)/stream.js $(SRV)
 	cp $(CSS_SRC)/index.css $(SRV)
 	cp $(HTML)/index.html $(HTML)/stream.html $(SRV)
+	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server $(BIN)
 
 # HTML
 %: %.m4
