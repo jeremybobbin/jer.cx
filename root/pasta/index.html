@@ -1,10 +1,15 @@
 #!/bin/sh -e
 PASTE_BIN=pasta
+echo method: $REQUEST_METHOD 1>&2
 
 printf '\n'
-if [ "$REQUEST_METHOD" = POST ]; then
-	code="$(tr -dc '[:alnum:]' < /dev/urandom | head -c3)"
-	echo "$code"
-	cat > "${PASTE_BIN}/$code"
-fi
-
+case "$REQUEST_METHOD" in
+	GET)
+		ARGV0=$(realpath "$0")
+		ls -t "${ARGV0%/*}" | grep -v "$0";;
+	POST)
+		code="$(tr -dc '[:alnum:]' < /dev/urandom | head -c3)"
+		echo "$code"
+		cat > "${PASTE_BIN}/$code";;
+	*) exit 1
+esac
