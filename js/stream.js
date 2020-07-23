@@ -39,7 +39,7 @@ function mediaErrorHandler(hls) {
 
 attachOnLoad(function() {
 	var video = document.getElementById('video');
-	var videoSrc = '/stream/streaming.m3u8';
+	var videoSrc = '/stream/stream/streaming.m3u8';
 	if (Hls.isSupported()) {
 		console.log("works");
 		var hls = new Hls();
