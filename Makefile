@@ -44,7 +44,7 @@ install: build
 site.html: site
 
 # HTML
-%: %.m4
+%.html: %.html.m4
 	m4 -I html $< > $@
 
 $(HTML)/base.m4: $(HTML)/defs.m4 $(HTML)/header.html.m4 $(HTML)/footer.html.m4
