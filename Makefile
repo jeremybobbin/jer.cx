@@ -1,5 +1,9 @@
 # See LICENSE file for copyright and license details
 # $(QUARK_SRC)/quark - simple web server
+DESTDIR=/
+PREFIX=usr/local
+MANPREFIX=man
+
 SRV=srv
 BIN=bin
 ROOT=root
@@ -13,7 +17,6 @@ BLOG=blogposts
 QUARK_SRC=quark
 RTSP=rtsp-simple-server
 
-
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	$(HTML)/index.html $(HTML)/stream/index.html $(RTSP)/rtsp-simple-server \
 	$(JS)/stream.js
@@ -22,6 +25,17 @@ build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	cp $(CSS_SRC)/index.css $(SRV)
 	cp -a $(HTML)/index.html $(HTML)/stream $(SRV)
 	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server $(BIN)
+
+install: build
+	mkdir -p "$(DESTDIR)$(PREFIX)/bin"
+	cp jer.cx.service /etc/systemd/system/
+	systemctl daemon-reload
+	cp -f $(BIN)/. "$(DESTDIR)$(PREFIX)/bin"
+	cp -a srv/. /srv/http/
+	chmod 755 "$(DESTDIR)$(PREFIX)/bin/$(QUARK_SRC)/quark"
+	mkdir -p "$(DESTDIR)$(MANPREFIX)/man1"
+	cp $(QUARK_SRC)/quark.1 "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
+	chmod 644 "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
 
 # Markdown
 %.html: %.md
@@ -69,14 +83,6 @@ dist:
 		$(COMPONENTS:=.c) $(COMPONENTS:=.h) $(QUARK_SRC)/main.c "$(QUARK_SRC)/quark-$(VERSION)"
 	tar -cf - "$(QUARK_SRC)/quark-$(VERSION)" | gzip -c > "$(QUARK_SRC)/quark-$(VERSION).tar.gz"
 	rm -rf "$(QUARK_SRC)/quark-$(VERSION)"
-
-install: all
-	mkdir -p "$(DESTDIR)$(PREFIX)/bin"
-	cp -f $(QUARK_SRC)/quark "$(DESTDIR)$(PREFIX)/bin"
-	chmod 755 "$(DESTDIR)$(PREFIX)/bin/$(QUARK_SRC)/quark"
-	mkdir -p "$(DESTDIR)$(MANPREFIX)/man1"
-	cp $(QUARK_SRC)/quark.1 "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
-	chmod 644 "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
 
 uninstall:
 	rm -f "$(DESTDIR)$(PREFIX)/bin/$(QUARK_SRC)/quark"
