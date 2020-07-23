@@ -53,7 +53,7 @@ rtsp-simple-server 2>&1 | while read -r date time count rel ip event; do
 				echo path=$path
 				# BUG: when ffmpeg panicks, rtsp-simple-server exits
 				# TODO: run transcode async
-				transcode "rtsp://localhost:8554/$path" "${WEBROOT:-'/srv/http'}/stream/$path"
+				transcode "rtsp://localhost:8554/$path" "${WEBROOT:-/srv/http}/stream/$path"
 			else
 				die "couldn't read rtsp-simple-server line"
 			fi;;
