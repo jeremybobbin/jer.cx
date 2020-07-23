@@ -15,22 +15,24 @@ function attachOnLoad(fn) {
 	}
 }
 
-function handleMediaError(event, data) {
-	if (data.fatal) {
-		switch(data.type) {
-		case Hls.ErrorTypes.NETWORK_ERROR:
-			// try to recover network error
-			console.log("fatal network error encountered, try to recover");
-			hls.startLoad();
-			break;
-		case Hls.ErrorTypes.MEDIA_ERROR:
-			console.log("fatal media error encountered, try to recover");
-			hls.recoverMediaError();
-			break;
-		default:
-			// cannot recover
-			hls.destroy();
-			break;
+function mediaErrorHandler(hls) {
+	return function(event, data) {
+		if (data.fatal) {
+			switch(data.type) {
+			case Hls.ErrorTypes.NETWORK_ERROR:
+				// try to recover network error
+				console.log("fatal network error encountered, try to recover");
+				hls.startLoad();
+				break;
+			case Hls.ErrorTypes.MEDIA_ERROR:
+				console.log("fatal media error encountered, try to recover");
+				hls.recoverMediaError();
+				break;
+			default:
+				// cannot recover
+				hls.destroy();
+				break;
+			}
 		}
 	}
 }
@@ -64,7 +66,7 @@ attachOnLoad(function() {
 			hls.attachMedia(video);
 		}
 		hls.liveDurationInfinity = true;
-		hls.on(Hls.Events.ERROR, handleMediaError);
+		hls.on(Hls.Events.ERROR, mediaErrorHandler(hls));
 	} else {
 		console.log("doesn't work.");
 	}
