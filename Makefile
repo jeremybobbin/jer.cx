@@ -1,11 +1,12 @@
 # See LICENSE file for copyright and license details
 # $(QUARK_SRC)/quark - simple web server
-DESTDIR=/
-PREFIX=usr/local
-MANPREFIX=man
+DESTDIR=
+PREFIX=/usr/local
+MANPREFIX=$(PREFIX)/share/man
+SRV=$(DESTDIR)/srv/http
+BIN=$(DESTDIR)$(PREFIX)/bin
+MAN=$(DESTDIR)$(MANPREFIX)
 
-SRV=srv
-BIN=bin
 ROOT=root
 CSS_SRC=css
 PUBLIC=$(SRV)/public
@@ -20,22 +21,21 @@ RTSP=rtsp-simple-server
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	$(HTML)/index.html $(HTML)/stream/index.html $(RTSP)/rtsp-simple-server \
 	$(JS)/stream.js
+
+install: build
+	mkdir -p "$(DESTDIR)/etc/systemd/system"
+	cp jer.cx.service $(DESTDIR)/etc/systemd/system/
+	mkdir -p "$(SRV)"
 	cp -a root/. $(SRV)
 	cp $(JS)/stream.js $(SRV)
 	cp $(CSS_SRC)/index.css $(SRV)
 	cp -a $(HTML)/index.html $(HTML)/stream $(SRV)
-	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server $(BIN)
-
-install: build
-	mkdir -p "$(DESTDIR)$(PREFIX)/bin"
-	cp jer.cx.service /etc/systemd/system/
-	systemctl daemon-reload
-	cp -f $(BIN)/. "$(DESTDIR)$(PREFIX)/bin"
-	cp -a srv/. /srv/http/
-	chmod 755 "$(DESTDIR)$(PREFIX)/bin/$(QUARK_SRC)/quark"
-	mkdir -p "$(DESTDIR)$(MANPREFIX)/man1"
-	cp $(QUARK_SRC)/quark.1 "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
-	chmod 644 "$(DESTDIR)$(MANPREFIX)/man1/$(QUARK_SRC)/quark.1"
+	mkdir -p "$(BIN)"
+	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server bin/stream.sh $(BIN)
+	chmod 755 "$(BIN)/quark" "$(BIN)/rtsp-simple-server" "$(BIN)/stream.sh"
+	mkdir -p "$(MAN)/man1"
+	cp $(QUARK_SRC)/quark.1 "$(MAN)/man1/quark.1"
+	chmod 644 "$(MAN)/man1/quark.1"
 
 # Markdown
 %.html: %.md
@@ -98,4 +98,3 @@ $(RTSP)/rtsp-simple-server: $(RTSP)/conf.go $(RTSP)/main.go \
 clean:
 	rm -f $(HTML)/*.html
 	rm -f $(QUARK_SRC)/quark $(QUARK_SRC)/main.o $(COMPONENTS:=.o)
-	rm -rf $(SRV)
