@@ -1,15 +1,15 @@
 [Unit]
-Description=Jer.cx HTTPS service
-After=network.target postgresql.service
-Requires=postgresql.service
+Description=Jer.cx HTTP service
+After=network.target
+Requires=network.target
 StartLimitIntervalSec=0
 
 [Service]
 Type=simple
 Restart=always
 RestartSec=1
-WorkingDirectory=/usr/src/jer.cx
-ExecStart=/usr/bin/jer.cx
+WorkingDirectory=/srv/http
+ExecStart=/usr/local/bin/quark -p 8080 -h 0.0.0.0 -d /srv/http -x
 
 [Install]
 WantedBy=multi-user.target
