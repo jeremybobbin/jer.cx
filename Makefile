@@ -8,6 +8,8 @@ PUBLIC=$(SRV)/public
 HTML=html
 JS=js
 
+BLOG=blogposts
+
 QUARK_SRC=quark
 RTSP=rtsp-simple-server
 
@@ -19,6 +21,12 @@ build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	cp $(CSS_SRC)/index.css $(SRV)
 	cp -a $(HTML)/index.html $(HTML)/stream $(SRV)
 	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server $(BIN)
+
+# Markdown
+%.html: %.md
+	pandoc $< > $@
+
+site.html: site
 
 # HTML
 %.html: %.html.m4
