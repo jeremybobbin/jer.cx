@@ -3,7 +3,7 @@ ARGV0="$(realpath "$0")"
 PATH="${ARGV0%/*}:$PATH"
 echo $PATH
 
-trap cleanup 0 1 2 3 6
+#trap cleanup 0 1 2 3 6
 
 cleanup() {
 	die "caught some signal. exitting"
