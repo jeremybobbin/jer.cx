@@ -11,3 +11,4 @@ rocket = { version = "*", features = ["tls"] }
 rocket_contrib = { version = "*", features = ["diesel_postgres_pool"] }
 serde = "*"
 serde_derive = "*"
+serde_json = "*"
