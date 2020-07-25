@@ -20,14 +20,14 @@ RTSP=rtsp-simple-server
 
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	$(HTML)/index.html $(HTML)/stream/index.html $(RTSP)/rtsp-simple-server \
-	$(JS)/stream.js
+	$(JS)/stream.js $(JS)/index.js
 
 install: build
 	mkdir -p "$(DESTDIR)/etc/systemd/system"
 	cp jer.cx.service $(DESTDIR)/etc/systemd/system/
 	mkdir -p "$(SRV)"
 	cp -a root/. $(SRV)
-	cp $(JS)/stream.js $(SRV)
+	cp $(JS)/index.js $(JS)/stream.js $(SRV)
 	cp $(CSS_SRC)/index.css $(SRV)
 	cp -a $(HTML)/index.html $(HTML)/stream $(SRV)
 	mkdir -p "$(BIN)"
