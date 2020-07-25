@@ -23,15 +23,15 @@ die() {
 # transcode <url> <dir>
 transcode() {
 	mkdir -p "$2"
-	exec ffmpeg \
+	ffmpeg \
 		-fflags nobuffer \
 		-rtsp_transport udp \
 		-i "$1" \
 		-vsync 0 \
 		-copyts \
 		-vcodec copy \
+		-acodec copy \
 		-movflags frag_keyframe+empty_moov \
-		-an \
 		-hls_flags delete_segments \
 		-hls_list_size 1 \
 		-f segment \
