@@ -12,16 +12,13 @@ export default class About extends Component {
 						<img src={Jer} className="jer-face"/>
 					</div>
 					<p className="first">
-							I'm Jeremy and I'm 20 years old. I was born and raised in Orlando, Florida. <a href="resume.pdf">This</a> is my resume.
+							I'm Jeremy and I'm 22 years old. I was born and raised in Orlando, Florida. <a href="resume.pdf">This</a> is my resume.
 					</p>
 					<br />
 					<p>
-							I aspire to live my life in accordance with the Unix philosophy. I enjoy optimizing my own work flow through the use of the modular and exstensible core utilities. Though I aim to write most of my shell commands as one-liners, I still resort to Bash for-loops from time to time. If you have similar aspirations, <a href="mailto:jer@jer.cx">email me</a>.
+							I enjoy optimizing my own work flow through the use of the modular and exstensible Unix core utilities. <a href="mailto:jer@jer.cx">Email me</a>.
 					</p>
 					<br/>
-					<p>
-							I like keyboard-driven applications, like <a href="https://www.vim.org">Vim</a>, <a href="https://www.qutebrowser.org">Qutebrowser</a> and <a href="https://dwm.suckless.org/">DWM</a>.
-					</p>
 					<br />
 				</div>
 				<div className="this-site">
