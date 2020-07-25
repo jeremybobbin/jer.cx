@@ -39,7 +39,11 @@ function mediaErrorHandler(hls) {
 
 attachOnLoad(function() {
 	var video = document.getElementById('video');
+	var wrapper = document.getElementById('stream-container');
+	var message = document.getElementById('video-message');
 	var videoSrc = '/stream/stream/streaming.m3u8';
+
+	video.autoplay = true;
 	if (Hls.isSupported()) {
 		console.log("works");
 		var hls = new Hls();
@@ -52,13 +56,15 @@ attachOnLoad(function() {
 				console.log("manifest loaded, found " + data.levels.length + " quality level");
 			});
 		});
-		video.onclick = function() {
-			video.play();
+		wrapper.onclick = function(event) {
+			event.preventDefault();
+			console.log("wrapper clicked");
+			video.muted = false;
+			message.style.display = "none";
 		}
 		video.addEventListener('loadedmetadata', function() {
-			video.onclick = function() {
-				video.play();
-			}
+			video.muted = true;
+			video.play();
 		});
 		video.onended = function() {
 			console.log("video ended");
