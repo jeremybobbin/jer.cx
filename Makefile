@@ -56,6 +56,10 @@ $(HTML)/stream/index.html: $(HTML)/stream/index.html.m4
 %.css: %.scss
 	sassc $< > $@
 
+$(CSS_SRC)/index.scss: $(CSS_SRC)/about.scss $(CSS_SRC)/blog.scss \
+	$(CSS_SRC)/downloads.scss $(CSS_SRC)/footer.scss $(CSS_SRC)/header.scss \
+	$(CSS_SRC)/layout.scss $(CSS_SRC)/main.scss $(CSS_SRC)/vars.scss
+
 $(CSS_SRC)/index.css: $(CSS_SRC)/index.scss
 
 # QUARK
