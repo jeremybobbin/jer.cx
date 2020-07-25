@@ -27,5 +27,7 @@ TAG([LINK], [a], [href="$1" $2])
 TAG([SCRIPT], [script], [ifelse($#, 0, [], [src="$1"])])
 TAG([MAIN], [main])
 TAG([CSS], [link], [rel="stylesheet" href="$1" $2])
+
+define([BR], [<br/>])
 divert(0)dnl
 
