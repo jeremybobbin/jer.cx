@@ -14,15 +14,17 @@ impl<'a> PasteID<'a> {
     /// the characters used are from the sets [0-9], [A-Z], [a-z]. The
     /// probability of a collision depends on the value of `size` and the number
     /// of IDs generated thus far.
-    pub fn new(size: usize, ext: &str) -> PasteID<'static> {
+    pub fn new(size: usize, ext: Option<String>) -> PasteID<'static> {
         let mut id = String::with_capacity(size);
         let mut rng = rand::thread_rng();
         for _ in 0..size {
             id.push(BASE62[rng.gen::<usize>() % 62] as char);
         }
 
-        id.push('.');
-        id.push_str(ext);
+        if let Some(ext) = ext {
+            id.push('.');
+            id.push_str(&ext);
+        }
         PasteID(Cow::Owned(id))
     }
 }

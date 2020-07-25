@@ -100,8 +100,7 @@ fn serve_react(conn: DbConn, socket: SocketAddr) -> Option<NamedFile> {
 
 #[post("/pasta?<ext>", data = "<data>")]
 fn posta(data: Data, ext: Option<String>) -> io::Result<String> {
-    let ext = ext.unwrap_or("".to_string());
-    let name = PasteID::new(3, &ext);
+    let name = PasteID::new(3, ext);
 
     let file = format!("assets/pasta/{}", name);
 
