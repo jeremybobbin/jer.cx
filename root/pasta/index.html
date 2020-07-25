@@ -10,6 +10,7 @@ case "$REQUEST_METHOD" in
 	POST)
 		code="$(tr -dc '[:alnum:]' < /dev/urandom | head -c3)"
 		echo "$code"
-		cat > "${PASTE_BIN}/$code";;
+		# 50MB max(?)
+		cat | head -c 50000000 > "${PASTE_BIN}/$code";;
 	*) exit 1
 esac
