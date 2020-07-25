@@ -187,6 +187,12 @@ fn mikrotik() -> Redirect {
     Redirect::to("https://jer.cx/blog/Virtualize_RouterOS")
 }
 
+// Virtualize RouterOS shortcut
+#[get("/lebowsky")]
+fn lebowsky() -> Redirect {
+    Redirect::to("https://jer.cx/videos/The_Big_Lebowsky.mp4")
+}
+
 // Favicon.ico
 #[get("/favicon.ico")]
 fn favicon() -> Option<NamedFile> {
@@ -257,6 +263,8 @@ fn main() {
 
 
         favicon,
+
+        lebowsky,
 
         resume,
         resume_htm,
