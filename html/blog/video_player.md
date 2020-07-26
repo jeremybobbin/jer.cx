@@ -1,3 +1,6 @@
+---
+title: Video Player
+---
 
 <center>
 Jer.cx Video Player

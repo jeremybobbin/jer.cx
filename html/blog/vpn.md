@@ -1,3 +1,7 @@
+---
+title: Jer.cx VPN
+---
+
 <center>
 OpenVPN-based Virtual Private Network
 </center>

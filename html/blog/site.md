@@ -1,3 +1,7 @@
+---
+title: My Site
+---
+
 <center>
 
 This is it. This is my personal website

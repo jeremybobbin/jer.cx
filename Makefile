@@ -13,14 +13,14 @@ PUBLIC=$(SRV)/public
 HTML=html
 JS=js
 
-BLOG=blogposts
+BLOG=$(HTML)/blog
 
 QUARK_SRC=quark
 RTSP=rtsp-simple-server
 
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	$(HTML)/index.html $(HTML)/live/index.html $(HTML)/about/index.html \
-	$(RTSP)/rtsp-simple-server $(JS)/stream.js $(JS)/index.js
+	$(RTSP)/rtsp-simple-server $(JS)/stream.js $(JS)/index.js $(BLOG)/index.html
 
 install: build
 	mkdir -p "$(DESTDIR)/etc/systemd/system"
@@ -29,7 +29,7 @@ install: build
 	cp -a root/. $(SRV)
 	cp $(JS)/index.js $(JS)/stream.js $(SRV)
 	cp $(CSS_SRC)/index.css $(SRV)
-	cp -a $(HTML)/index.html $(HTML)/live $(HTML)/about $(SRV)
+	cp -a $(HTML)/index.html $(HTML)/live $(HTML)/about $(BLOG) $(SRV)
 	mkdir -p "$(BIN)"
 	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server bin/stream.sh $(BIN)
 	chmod 755 "$(BIN)/quark" "$(BIN)/rtsp-simple-server" "$(BIN)/stream.sh"
@@ -41,7 +41,13 @@ install: build
 %.html: %.md
 	pandoc $< > $@
 
-site.html: site
+$(BLOG)/index.html.m4: $(BLOG)/site.html $(BLOG)/video_player.html \
+	$(BLOG)/virtualize_routeros.md $(BLOG)/vpn.html
+
+$(BLOG)/vpn.html: $(BLOG)/vpn.md
+$(BLOG)/site.html: $(BLOG)/site.md
+$(BLOG)/video_player.html: $(BLOG)/video_player.md
+$(BLOG)/virtualize_routeros.html: $(BLOG)/virtualize_routeros.md
 
 # HTML
 %.html: %.html.m4
@@ -49,11 +55,12 @@ site.html: site
 
 $(HTML)/base.m4: $(HTML)/defs.m4 $(HTML)/header.html.m4 $(HTML)/footer.html.m4
 $(HTML)/index.html.m4 $(HTML)/live/index.html.m4 \
-	$(HTML)/about/index.html.m4: $(HTML)/base.m4
+	$(HTML)/about/index.html.m4 $(HTML)/blog/index.html.m4: $(HTML)/base.m4
 $(HTML)/index.html: $(HTML)/index.html.m4
 
 $(HTML)/live/index.html: $(HTML)/live/index.html.m4
 $(HTML)/about/index.html: $(HTML)/about/index.html.m4
+$(BLOG)/index.html: $(HTML)/about/index.html.m4
 
 # CSS
 %.css: %.scss
