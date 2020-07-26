@@ -41,7 +41,7 @@ attachOnLoad(function() {
 	var video = document.getElementById('video');
 	var wrapper = document.getElementById('stream-container');
 	var message = document.getElementById('video-message');
-	var videoSrc = '/stream/stream/streaming.m3u8';
+	var videoSrc = '/live/stream/streaming.m3u8';
 
 	video.autoplay = true;
 	if (Hls.isSupported()) {

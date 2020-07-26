@@ -1,7 +1,7 @@
 include(base.m4)
 SCRIPT(https://cdn.jsdelivr.net/npm/hls.js@latest) END
-SCRIPT(/stream.js) END
-DIV(class="stream")
+SCRIPT(/live.js) END
+DIV(class="live")
 	DIV(id="stream-container")
 		VIDEO(id="video") END
 		DIV(id="overlay")

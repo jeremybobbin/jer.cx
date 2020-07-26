@@ -19,7 +19,7 @@ QUARK_SRC=quark
 RTSP=rtsp-simple-server
 
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
-	$(HTML)/index.html $(HTML)/stream/index.html $(HTML)/about/index.html \
+	$(HTML)/index.html $(HTML)/live/index.html $(HTML)/about/index.html \
 	$(RTSP)/rtsp-simple-server $(JS)/stream.js $(JS)/index.js
 
 install: build
@@ -29,7 +29,7 @@ install: build
 	cp -a root/. $(SRV)
 	cp $(JS)/index.js $(JS)/stream.js $(SRV)
 	cp $(CSS_SRC)/index.css $(SRV)
-	cp -a $(HTML)/index.html $(HTML)/stream $(HTML)/about $(SRV)
+	cp -a $(HTML)/index.html $(HTML)/live $(HTML)/about $(SRV)
 	mkdir -p "$(BIN)"
 	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server bin/stream.sh $(BIN)
 	chmod 755 "$(BIN)/quark" "$(BIN)/rtsp-simple-server" "$(BIN)/stream.sh"
@@ -48,11 +48,11 @@ site.html: site
 	m4 -I html $< > $@
 
 $(HTML)/base.m4: $(HTML)/defs.m4 $(HTML)/header.html.m4 $(HTML)/footer.html.m4
-$(HTML)/index.html.m4 $(HTML)/stream/index.html.m4 \
+$(HTML)/index.html.m4 $(HTML)/live/index.html.m4 \
 	$(HTML)/about/index.html.m4: $(HTML)/base.m4
 $(HTML)/index.html: $(HTML)/index.html.m4
 
-$(HTML)/stream/index.html: $(HTML)/stream/index.html.m4
+$(HTML)/live/index.html: $(HTML)/live/index.html.m4
 $(HTML)/about/index.html: $(HTML)/about/index.html.m4
 
 # CSS
@@ -62,7 +62,7 @@ $(HTML)/about/index.html: $(HTML)/about/index.html.m4
 $(CSS_SRC)/index.scss: $(CSS_SRC)/about.scss $(CSS_SRC)/blog.scss \
 	$(CSS_SRC)/downloads.scss $(CSS_SRC)/footer.scss $(CSS_SRC)/header.scss \
 	$(CSS_SRC)/layout.scss $(CSS_SRC)/main.scss $(CSS_SRC)/vars.scss \
-	$(CSS_SRC)/stream.scss
+	$(CSS_SRC)/live.scss
 	
 $(CSS_SRC)/index.css: $(CSS_SRC)/index.scss
 
