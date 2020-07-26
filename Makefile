@@ -42,7 +42,7 @@ install: build
 	pandoc $< > $@
 
 $(BLOG)/index.html.m4: $(BLOG)/site.html $(BLOG)/video_player.html \
-	$(BLOG)/virtualize_routeros.md $(BLOG)/vpn.html
+	$(BLOG)/virtualize_routeros.html $(BLOG)/vpn.html
 
 $(BLOG)/vpn.html: $(BLOG)/vpn.md
 $(BLOG)/site.html: $(BLOG)/site.md
