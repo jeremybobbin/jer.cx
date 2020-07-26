@@ -17,8 +17,8 @@ DIV(class="about")
 		BR
 		P 
 				I like keyboard-driven applications, like
-				LINK(https://www.vim.org)Vim[]END,
-				LINK(https://www.qutebrowser.org)Qutebrowser[]END and
+				LINK(https://github.com/martanne/vis)Vis[]END,
+				LINK(https://neomutt.org/)Neomutt[]END and
 				LINK(https://dwm.suckless.org/)DWM[]END.
 		END
 		BR
