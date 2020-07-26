@@ -34,15 +34,12 @@ transcode() {
 		-movflags frag_keyframe+empty_moov \
 		-hls_flags delete_segments \
 		-hls_list_size 1 \
-		-f segment \
-		-segment_list_flags live \
-		-segment_time 2 \
-		-segment_list_size 5 \
-		-segment_wrap 20 \
-		-segment_format mpegts \
-		-segment_list "$2/streaming.m3u8" \
-		-segment_list_type m3u8 \
-		"$2/%d.ts"
+		-f hls \
+		-hls_time 2 \
+		-hls_list_size 3 \
+		-hls_wrap 10 \
+		-hls_segment_filename "$2/%d.ts" \
+		"$2/streaming.m3u8"
 }
 
 rtsp-simple-server 2>&1 | while read -r date time count rel ip event; do
