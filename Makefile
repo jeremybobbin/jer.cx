@@ -20,7 +20,8 @@ RTSP=rtsp-simple-server
 
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	$(HTML)/index.html $(HTML)/live/index.html $(HTML)/about/index.html \
-	$(RTSP)/rtsp-simple-server $(JS)/stream.js $(JS)/index.js $(BLOG)/index.html
+	$(RTSP)/rtsp-simple-server $(JS)/stream.js $(JS)/index.js $(BLOG)/index.html \
+	$(BLOG)/site.html $(BLOG)/virtualize_routeros.html
 
 install: build
 	mkdir -p "$(DESTDIR)/etc/systemd/system"
@@ -39,10 +40,10 @@ install: build
 
 # Markdown
 %.html: %.md
-	pandoc $< > $@
+	pandoc $< | m4 -D TITLE="$$(awk -F: '/^title:/ { print $$2; exit }' $<)" -I html base.m4 blog/blog.html.m4 - > $@ 
 
-$(BLOG)/index.html.m4: $(BLOG)/site.html $(BLOG)/video_player.html \
-	$(BLOG)/virtualize_routeros.html $(BLOG)/vpn.html
+$(BLOG)/index.html.m4: $(BLOG)/site.md $(BLOG)/video_player.md \
+	$(BLOG)/virtualize_routeros.md $(BLOG)/vpn.md
 
 $(BLOG)/vpn.html: $(BLOG)/vpn.md
 $(BLOG)/site.html: $(BLOG)/site.md
