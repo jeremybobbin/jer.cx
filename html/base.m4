@@ -5,9 +5,11 @@ HTML
 	HEAD
 		CSS(/index.css) END
 	END
-	BODY
+	BODY(class="root")
 	include(header.html.m4)dnl
+	MAIN()
 		divert(1)dnl
+	END
 	include(footer.html.m4)dnl
 	END
 END
