@@ -1,4 +1,3 @@
-include(base.m4)
 
 SCRIPT(/index.js) END
 

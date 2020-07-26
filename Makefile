@@ -51,7 +51,7 @@ $(BLOG)/virtualize_routeros.html: $(BLOG)/virtualize_routeros.md
 
 # HTML
 %.html: %.html.m4
-	m4 -I html $< > $@
+	m4 -I html base.m4 $< > $@
 
 $(HTML)/base.m4: $(HTML)/defs.m4 $(HTML)/header.html.m4 $(HTML)/footer.html.m4
 $(HTML)/index.html.m4 $(HTML)/live/index.html.m4 \

@@ -1,4 +1,3 @@
-include(base.m4)
 SCRIPT(https://cdn.jsdelivr.net/npm/hls.js@latest) END
 SCRIPT(/live.js) END
 DIV(class="live")

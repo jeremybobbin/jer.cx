@@ -1,4 +1,3 @@
-include(base.m4)
 define([TMP], maketemp(/tmp/m4-XXXXX))
 syscmd([awk -F: '/^title:/ { sub(/\.md$/, ".html", FILENAME);
 	printf "DIV(class=\"blog\") H1 LINK(/blog/%s)%s[]END END\ninclude(%s) END BR\n",
