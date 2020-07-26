@@ -17,7 +17,7 @@ function attachOnLoad(fn) {
 
 attachOnLoad(function(e) {
 	var img = document.getElementById("cat");
-	fetch('https://cataas.com/cat/cute')
+	fetch('https://cataas.com/cat/cute', { cache: "no-store" })
 		.then(response => response.blob())
 		.then(image => img.src = URL.createObjectURL(image));
 });
