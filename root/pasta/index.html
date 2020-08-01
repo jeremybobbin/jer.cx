@@ -11,6 +11,6 @@ case "$REQUEST_METHOD" in
 		code="$(tr -dc '[:alnum:]' < /dev/urandom | head -c3)"
 		echo "$code"
 		# 50MB max(?)
-		cat | head -c 50000000 > "${PASTE_BIN}/$code";;
+		head -c 50000000 > "${PASTE_BIN}/$code";;
 	*) exit 1
 esac
