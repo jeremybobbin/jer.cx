@@ -1,7 +1,11 @@
 .live {
+	padding: auto;
+	margin: auto;
 	#stream-container {
 		position:relative;
 		video {
+			display: table;
+			margin: auto;
 			position:relative;
 			z-index:0;
 		}
