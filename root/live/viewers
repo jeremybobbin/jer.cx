@@ -1,0 +1,22 @@
+#!/bin/sh
+VAR="../../var"
+# directory of timestamps -> user IDs
+VIEWERS="$VAR/viewers"
+USERS="$VAR/users"
+STREAM="./live/stream"
+
+mkdir -p "$VIEWERS" "$USERS" "$STREAM"
+
+now="$(date +%s)"
+before="$((now - 10))"
+
+# remove the files that are older than 10 seconds
+ls "$VIEWERS" | while read -r ts; do
+	if [ -n "$ts" ] && [ "$ts" -lt "$before" ]; then
+		rm "$VIEWERS/$ts"
+	fi
+done
+
+printf '\n'
+awk 'BEGIN { if (ARGC == 0) exit } !x[$0]++' $VIEWERS/* | wc -l
+

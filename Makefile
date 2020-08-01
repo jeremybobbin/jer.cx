@@ -24,7 +24,7 @@ build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	$(BLOG)/site.html $(BLOG)/virtualize_routeros.html
 
 install: build
-	mkdir -p "$(DESTDIR)/etc/systemd/system"
+	mkdir -p "$(DESTDIR)/etc/systemd/system" "$(DESTDIR)/var"
 	cp jer.cx.service $(DESTDIR)/etc/systemd/system/
 	mkdir -p "$(SRV)"
 	cp -a root/. $(SRV)

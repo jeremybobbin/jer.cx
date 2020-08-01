@@ -39,6 +39,7 @@ transcode() {
 		-hls_list_size 3 \
 		-hls_wrap 10 \
 		-hls_segment_filename "$2/%d.ts" \
+		-hls_base_url /live/stream/ \
 		"$2/streaming.m3u8" </dev/null
 }
 
