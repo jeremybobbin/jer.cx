@@ -39,7 +39,7 @@ transcode() {
 		-hls_list_size 3 \
 		-hls_wrap 10 \
 		-hls_segment_filename "$2/%d.ts" \
-		"$2/streaming.m3u8"
+		"$2/streaming.m3u8" </dev/null
 }
 
 rtsp-simple-server 2>&1 | while read -r date time count rel ip event; do
