@@ -1,5 +1,5 @@
 SCRIPT(https://cdn.jsdelivr.net/npm/hls.js@latest) END
-SCRIPT(/live.js) END
+SCRIPT(/stream.js) END
 DIV(class="live")
 	DIV(id="stream-container")
 		VIDEO(id="video") END
