@@ -9,8 +9,15 @@ case "$REQUEST_METHOD" in
 		ls -t "${ARGV0%/*}" | grep -v "$0";;
 	POST)
 		code="$(tr -dc '[:alnum:]' < /dev/urandom | head -c3)"
-		echo "$code"
+		ext="$(echo "$QUERY_STRING" | awk 'BEGIN { FS="="; RS="&" }
+			$1 == "ext" { print $2 }')"
+		if [ -z "$ext" ]; then
+			name="$code"
+		else
+			name="$code.$ext"
+		fi
+		echo "$name"
 		# 50MB max(?)
-		head -c 50000000 > "${PASTE_BIN}/$code";;
+		head -c 50000000 > "${PASTE_BIN}/$name";;
 	*) exit 1
 esac
