@@ -29,11 +29,11 @@ install: build
 	cp jer.cx.service $(DESTDIR)/etc/systemd/system/
 	mkdir -p "$(SRV)"
 	cp -a root/. $(SRV)
-	cp $(JS)/index.js $(JS)/stream.js $(SRV)
+	cp $(JS)/index.js $(JS)/stream.js $(JS)/websocket.js $(SRV)
 	cp $(CSS_SRC)/index.css $(SRV)
 	cp -a $(HTML)/index.html $(HTML)/live $(HTML)/about $(BLOG) $(SRV)
 	mkdir -p "$(BIN)"
-	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server bin/stream.sh \
+	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server bin/* \
 		$(WS)/websocketd $(BIN)
 	chmod 755 "$(BIN)/quark" "$(BIN)/rtsp-simple-server" "$(BIN)/stream.sh"
 	mkdir -p "$(MAN)/man1"

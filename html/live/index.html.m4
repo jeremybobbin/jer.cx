@@ -1,5 +1,6 @@
 SCRIPT(https://cdn.jsdelivr.net/npm/hls.js@latest) END
 SCRIPT(/stream.js) END
+SCRIPT(/websocket.js) END
 DIV(class="live")
 	DIV(id="stream-container")
 		VIDEO(id="video") END
