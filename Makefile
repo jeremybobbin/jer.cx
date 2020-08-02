@@ -17,11 +17,12 @@ BLOG=$(HTML)/blog
 
 QUARK_SRC=quark
 RTSP=rtsp-simple-server
+WS=websocketd/
 
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
 	$(HTML)/index.html $(HTML)/live/index.html $(HTML)/about/index.html \
 	$(RTSP)/rtsp-simple-server $(JS)/stream.js $(JS)/index.js $(BLOG)/index.html \
-	$(BLOG)/site.html $(BLOG)/virtualize_routeros.html
+	$(BLOG)/site.html $(BLOG)/virtualize_routeros.html $(WS)/websocketd
 
 install: build
 	mkdir -p "$(DESTDIR)/etc/systemd/system" "$(DESTDIR)/var"
@@ -32,7 +33,8 @@ install: build
 	cp $(CSS_SRC)/index.css $(SRV)
 	cp -a $(HTML)/index.html $(HTML)/live $(HTML)/about $(BLOG) $(SRV)
 	mkdir -p "$(BIN)"
-	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server bin/stream.sh $(BIN)
+	cp $(QUARK_SRC)/quark $(RTSP)/rtsp-simple-server bin/stream.sh \
+		$(WS)/websocketd $(BIN)
 	chmod 755 "$(BIN)/quark" "$(BIN)/rtsp-simple-server" "$(BIN)/stream.sh"
 	mkdir -p "$(MAN)/man1"
 	cp $(QUARK_SRC)/quark.1 "$(MAN)/man1/quark.1"
@@ -114,3 +116,15 @@ $(RTSP)/rtsp-simple-server: $(RTSP)/conf.go $(RTSP)/main.go \
 clean:
 	rm -f $(HTML)/*.html
 	rm -f $(QUARK_SRC)/quark $(QUARK_SRC)/main.o $(COMPONENTS:=.o)
+
+LIBWS=$(WS)/libwebsocketd
+
+WS_SRC=$(WS)/version.go $(WS)/help.go $(WS)/config.go \
+	$(WS)/main.go $(LIBWS)/license.go $(LIBWS)/env.go $(LIBWS)/logscope.go \
+	$(LIBWS)/process_endpoint.go $(LIBWS)/endpoint_test.go $(LIBWS)/handler.go \
+	$(LIBWS)/endpoint.go $(LIBWS)/config.go $(LIBWS)/handler_test.go \
+	$(LIBWS)/http_test.go $(LIBWS)/http.go $(LIBWS)/websocket_endpoint.go \
+	$(LIBWS)/launcher.go
+
+$(WS)/websocketd: $(WS_SRC)
+	cd $(WS) && go build

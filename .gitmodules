@@ -4,3 +4,6 @@
 [submodule "rtsp-simple-server"]
 	path = rtsp-simple-server
 	url = https://github.com/aler9/rtsp-simple-server
+[submodule "websocketd"]
+	path = websocketd
+	url = https://github.com/jeremybobbin/websocketd
