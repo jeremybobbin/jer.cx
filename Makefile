@@ -109,8 +109,10 @@ uninstall:
 # RTSP
 
 $(RTSP)/rtsp-simple-server: $(RTSP)/conf.go $(RTSP)/main.go \
-	$(RTSP)/main_test.go $(RTSP)/server-client.go $(RTSP)/server-tcpl.go \
-	$(RTSP)/server-udpl.go $(RTSP)/source.go $(RTSP)/utils.go
+	$(RTSP)/main_test.go $(RTSP)/source.go $(RTSP)/utils.go \
+	$(RTSP)/client.go $(RTSP)/logsyslog_unix.go \
+	$(RTSP)/logsyslog_win.go $(RTSP)/metrics.go $(RTSP)/path.go \
+	$(RTSP)/pprof.go $(RTSP)/servertcp.go $(RTSP)/serverudp.go
 	cd $(RTSP) && go build
 
 clean:
