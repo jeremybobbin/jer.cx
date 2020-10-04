@@ -1,0 +1,35 @@
+#!/bin/sh
+# directory of timestamps, containing user IDs
+# one timestamp, many user IDs
+VAR="../../var"
+VIEWERS="$VAR/viewers"
+USERS="$VAR/users"
+LIVE="./live"
+mkdir -p "$VIEWERS" "$USERS" "$LIVE"
+
+if [ -z "$ID" ]; then
+	file="$(mktemp $USERS/XXXXX)"
+	ID="${file##*/}"
+	printf 'Set-Cookie: ID=%s\n' "$ID"
+fi
+
+printf '\n'
+
+echo "$ID" >> "$VIEWERS/$(date +%s)"
+
+IFS='&'
+for s in $(echo "$QUERY_STRING"); do
+	case ${s%%=*} in
+		seg) seg=${s#*=};;
+		stream) stream=${s#*=};;
+	esac
+done
+
+if [ -n "$seg" ] && [ -n "$stream" ]; then
+	cat "$LIVE/$stream/$seg"
+elif [ -n "$stream" ]; then
+	cat "$LIVE/$stream/streaming.m3u8"
+else
+	cat "$LIVE/real-index.html" 
+fi
+

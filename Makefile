@@ -20,7 +20,7 @@ RTSP=rtsp-simple-server
 WS=websocketd/
 
 build: $(QUARK_SRC)/quark $(CSS_SRC)/index.css \
-	$(HTML)/index.html $(HTML)/live/index.html $(HTML)/about/index.html \
+	$(HTML)/index.html $(HTML)/live/real-index.html $(HTML)/about/index.html \
 	$(RTSP)/rtsp-simple-server $(JS)/stream.js $(JS)/index.js $(BLOG)/index.html \
 	$(BLOG)/site.html $(BLOG)/virtualize_routeros.html $(WS)/websocketd
 
@@ -56,12 +56,12 @@ $(BLOG)/virtualize_routeros.html: $(BLOG)/virtualize_routeros.md
 %.html: %.html.m4
 	m4 -I html base.m4 $< > $@
 
-$(HTML)/base.m4: $(HTML)/defs.m4 $(HTML)/header.html.m4 $(HTML)/footer.html.m4
-$(HTML)/index.html.m4 $(HTML)/live/index.html.m4 \
+$(HTML)/defs.m4 $(HTML)/header.html.m4 $(HTML)/footer.html.m4 \
+	$(HTML)/index.html.m4 $(HTML)/live/real-index.html.m4 \
 	$(HTML)/about/index.html.m4 $(HTML)/blog/index.html.m4: $(HTML)/base.m4
 $(HTML)/index.html: $(HTML)/index.html.m4
 
-$(HTML)/live/index.html: $(HTML)/live/index.html.m4
+$(HTML)/live/real-index.html: $(HTML)/live/real-index.html.m4
 $(HTML)/about/index.html: $(HTML)/about/index.html.m4
 $(BLOG)/index.html: $(HTML)/about/index.html.m4
 

@@ -22,6 +22,8 @@ function mediaErrorHandler(hls) {
 			case Hls.ErrorTypes.NETWORK_ERROR:
 				// try to recover network error
 				console.log("fatal network error encountered, try to recover");
+				console.log(event);
+				console.log(data);
 				hls.startLoad();
 				break;
 			case Hls.ErrorTypes.MEDIA_ERROR:
@@ -77,7 +79,7 @@ attachOnLoad(function() {
 	var video = document.getElementById('video');
 	var wrapper = document.getElementById('stream-container');
 	var message = document.getElementById('video-message');
-	var videoSrc = '/live/stream';
+	var videoSrc = '/live?stream=stream';
 
 	video.autoplay = true;
 	if (Hls.isSupported()) {
