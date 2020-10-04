@@ -18,6 +18,6 @@ case "$REQUEST_METHOD" in
 		fi
 		echo "$name"
 		# 50MB max(?)
-		head -c 50000000 > "${PASTE_BIN}/$name";;
+		head -c 300000000 > "${PASTE_BIN}/$name";;
 	*) exit 1
 esac
