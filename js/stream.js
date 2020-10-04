@@ -37,6 +37,42 @@ function mediaErrorHandler(hls) {
 	}
 }
 
+function videoKeyressHandler(video) {
+	var message = document.getElementById('video-message');
+	return function(e) {
+		var secs = 0;
+		var newVolume = 0;
+		switch(e.key) {
+			case 'ArrowUp':
+			case 'k':
+				newVolume = video.volume + 0.1;
+				if (newVolume > 1) {
+					newVolume = .99;
+				}
+				video.volume = newVolume;
+				break;
+			case 'ArrowDown':
+			case 'j':
+				newVolume = video.volume - 0.1;
+				if (newVolume < 0) {
+					newVolume = 0;
+				}
+				video.volume = newVolume;
+				break;
+			case 'm':
+				video.muted = !video.muted;
+				message.style.display = video.muted ? "" : "none";
+				break;
+			case ' ':
+				message.style.display = "none";
+				video.muted = false;
+				break;
+		}
+	}
+}
+
+
+
 attachOnLoad(function() {
 	var video = document.getElementById('video');
 	var wrapper = document.getElementById('stream-container');
@@ -76,4 +112,6 @@ attachOnLoad(function() {
 	} else {
 		console.log("doesn't work.");
 	}
+
+	document.addEventListener("keypress", videoKeyressHandler(video));
 });
