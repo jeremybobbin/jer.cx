@@ -18,5 +18,5 @@ ls "$VIEWERS" | while read -r ts; do
 done
 
 printf '\n'
-awk 'BEGIN { if (ARGC == 0) exit } !x[$0]++' $VIEWERS/* | wc -l
+find "$VIEWERS" -type f | xargs awk 'BEGIN { if (ARGC == 0) exit } !x[$0]++' | wc -l
 
