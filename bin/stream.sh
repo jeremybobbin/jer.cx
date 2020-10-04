@@ -35,11 +35,12 @@ transcode() {
 		-hls_flags delete_segments \
 		-hls_list_size 1 \
 		-f hls \
-		-hls_time 2 \
+		-hls_time 1 \
 		-hls_list_size 3 \
-		-hls_wrap 10 \
+		-hls_allow_cache 0 \
+		-hls_wrap 4 \
 		-hls_segment_filename "$2/%d.ts" \
-		-hls_base_url /live/stream/ \
+		-hls_base_url /live/stream/?seg= \
 		"$2/streaming.m3u8" </dev/null
 }
 

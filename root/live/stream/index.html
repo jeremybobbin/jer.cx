@@ -14,5 +14,16 @@ if [ -z "$ID" ]; then
 fi
 
 printf '\n'
+
 echo "$ID" >> "$VIEWERS/$(date +%s)"
-cat "$STREAM/streaming.m3u8"
+
+# remove anything else
+seg=${QUERY_STRING##*seg=}
+seg=${seg%%&*}
+
+if [ -n "$seg" ]; then
+	exec cat $STREAM/$seg
+else
+	exec cat "$STREAM/streaming.m3u8"
+fi
+
