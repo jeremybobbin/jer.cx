@@ -27,4 +27,4 @@ ws=$!
 
 quark -p 8080 -h 0.0.0.0 -d build/srv/http -x &
 quark=$!
-stream.sh
+live.sh
