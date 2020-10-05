@@ -1,7 +1,8 @@
 #!/bin/sh -e
-PATH=$PATH:build/usr/local/bin
-WEBROOT=build/srv/http
-export PATH WEBROOT
+ROOT=$PWD/build
+WEBROOT=$ROOT/srv/http
+PATH=$ROOT/usr/local/bin:$PATH
+export PATH ROOT WEBROOT
 
 trap cleanup 0 1 2 3 6
 
