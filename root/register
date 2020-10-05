@@ -1,0 +1,24 @@
+#!/bin/sh
+VAR="$ROOT/var"
+USERS="$VAR/users"
+SESSIONS="$VAR/sessions"
+LIVE="./live"
+mkdir -p "$USERS" "$LIVE"
+
+printf '\n'
+if ! read -r username; then
+	exit 1
+elif [ ${#username} -gt 16 ]; then
+	echo "error: username must be less than 16 characters"
+elif [ -f "$USERS/$username" ]; then
+	echo "error: $username already exists" 
+elif ! read -r password; then
+	echo "error: read error"
+elif echo "$password" | sha256sum | cut -d' ' -f1 | read hash; then
+	# file creation not included in the conditional
+	# if sha256sum, cut, or read fail, we don't want to create a user
+	echo "$hash" > "$USERS/$username"
+	exit 0
+fi
+
+exit 1

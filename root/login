@@ -1,0 +1,37 @@
+#!/bin/sh -x
+VAR="$ROOT/var"
+USERS="$VAR/users"
+SESSIONS="$VAR/sessions"
+mkdir -p "$USERS" "$SESSIONS"
+
+cd "$SESSIONS" 
+find | xargs -r stat -c "%Y %n" | awk -v "date=$(date +%s)" \
+	'BEGIN { date -= (24*60*60) } { $1 < date }' | xargs -r rm
+
+# check for pre-existing session & reset the mtime
+if [ -n "$SESSION" ] && grep -q "$username" "$SESSION"; then
+	touch "$SESSION"
+	printf '\n%s\n' "session-renewed: $SESSION"
+	exit 0
+# needs to authenticate
+elif ! read -r username; then
+	echo "error: reading username" 
+elif [ ! -f "$USERS/$username" ]; then
+	echo "error: $username doesn't exist" 
+elif ! read -r password; then
+	echo "error: reading password" 
+elif hash="$(echo "$password" | sha256sum | cut -d' ' -f1)"; [ $? -ne 0 ]; then
+	echo "error: $username doesn't exist" 
+elif grep -q "$hash" "$USERS/username"; then
+	echo "error: incorrect password" 
+else
+	# successful login
+	# multiple users, multiple sessions
+	SESSION="$(mktemp XXXXXXXXXXX)"
+	echo "$username" > "$session"
+	printf 'Set-Cookie: SESSION=%s\n\n' "$session"
+	echo "session: $session"
+	exit 0
+fi
+
+exit 1
