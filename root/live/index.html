@@ -13,22 +13,7 @@ if [ -z "$ID" ]; then
 	printf 'Set-Cookie: ID=%s\n' "$ID"
 fi
 
-printf '\n'
-
 echo "$ID" >> "$VIEWERS/$(date +%s)"
 
-IFS='&'
-for s in $(echo "$QUERY_STRING"); do
-	case ${s%%=*} in
-		seg) seg=${s#*=};;
-	esac
-done
-
-if [ -n "$seg" ] && [ -n "$stream" ]; then
-	cat "$LIVE/$stream/$seg"
-elif [ -n "$stream" ]; then
-	cat "$LIVE/$stream/streaming.m3u8"
-else
-	cat "$LIVE/real-index.html" 
-fi
-
+printf '\n'
+cat "$LIVE/real-index.html"

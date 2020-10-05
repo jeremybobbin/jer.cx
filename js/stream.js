@@ -73,14 +73,24 @@ function videoKeyressHandler(video) {
 	}
 }
 
+function getStreams(cb) {
+	const Http = new XMLHttpRequest();
+	const url = window.location.href + '/ls';
+	Http.open("GET", url);
+	Http.send();
 
+	Http.onreadystatechange = function(e) {
+		console.log("got response: " + Http.responseText);
+		cb(Http.responseText.split('\n'));
+	}
+}
 
-attachOnLoad(function() {
+function createStream(videoSrc) {
 	var video = document.getElementById('video');
 	var wrapper = document.getElementById('stream-container');
 	var message = document.getElementById('video-message');
-	var videoSrc = '/live?stream=stream';
 
+	console.log("Creating stream: " + videoSrc);
 	video.autoplay = true;
 	if (Hls.isSupported()) {
 		console.log("works");
@@ -116,4 +126,13 @@ attachOnLoad(function() {
 	}
 
 	document.addEventListener("keypress", videoKeyressHandler(video));
+}
+
+attachOnLoad(function() {
+	getStreams(function(streams) {
+		console.log("got streams: " + streams);
+		if (streams[0]) {
+			createStream('/live/' + streams[0]);
+		}
+	});
 });

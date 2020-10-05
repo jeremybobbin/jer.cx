@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 ARGV0="$(realpath "$0")"
 PATH="${ARGV0%/*}:$PATH"
 echo $PATH
@@ -23,6 +23,7 @@ die() {
 # transcode <url> <webroot> <path>
 transcode() {
 	mkdir -p "$2/$3"
+	ln -s $ROOT/usr/local/bin/stream.sh "$2/$3/index.html"
 	ffmpeg \
 		-fflags nobuffer \
 		-rtsp_transport udp \
@@ -40,8 +41,9 @@ transcode() {
 		-hls_allow_cache 0 \
 		-hls_wrap 4 \
 		-hls_segment_filename "$2/$3/%d.ts" \
-		-hls_base_url "/live?stream=${3#*/}&seg=" \
+		-hls_base_url "$3?seg=" \
 		"$2/$3/streaming.m3u8" </dev/null
+	rm -rf "$2/$3"
 }
 
 rtsp-simple-server 2>&1 | while read -r date time count rel ip event; do
@@ -52,7 +54,7 @@ rtsp-simple-server 2>&1 | while read -r date time count rel ip event; do
 				echo path=$path
 				# BUG: when ffmpeg panicks, rtsp-simple-server exits
 				# TODO: run transcode async
-				transcode "rtsp://localhost:8554/$path" "${WEBROOT:-/srv/http}" "$path"
+				transcode "rtsp://localhost:8554/$path" "${WEBROOT:-/srv/http}/live" "$path"
 			else
 				die "couldn't read rtsp-simple-server line"
 			fi;;
