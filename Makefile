@@ -29,6 +29,7 @@ install: build
 	cp jer.cx.service $(DESTDIR)/etc/systemd/system/
 	mkdir -p "$(SRV)"
 	cp -a root/. $(SRV)
+	touch $(SRV)/forbidden && chmod a-r $(SRV)/forbidden
 	cp $(JS)/index.js $(JS)/stream.js $(JS)/websocket.js $(SRV)
 	cp $(CSS_SRC)/index.css $(SRV)
 	cp -a $(HTML)/index.html $(HTML)/live $(HTML)/about $(BLOG) $(SRV)
